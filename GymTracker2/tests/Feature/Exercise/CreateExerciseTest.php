@@ -55,4 +55,20 @@ class ExerciseCreateTest extends TestCase
             ->assertStatus(401);
     }
     
+     public function test_create_exercise_fails_with_missing_required_fields()
+    {
+        Passport::actingAs($this->adminUser);
+        $this->postJson('/api/exercises', ['name' => 'Only Name'])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(['muscle_group']);
+    }
+
+    public function test_create_exercise_fails_with_invalid_muscle_group()
+    {
+        Passport::actingAs($this->adminUser);
+        $exerciseData = ['name' => 'Invalid Exercise', 'muscle_group' => 'invalid_group'];
+        $this->postJson('/api/exercises', $exerciseData)
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(['muscle_group']);
+    }   
 }
