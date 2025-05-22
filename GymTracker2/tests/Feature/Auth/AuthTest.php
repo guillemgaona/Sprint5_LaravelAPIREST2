@@ -102,5 +102,14 @@ class AuthTest extends TestCase
             ->assertStatus(401); 
     }
 
- 
+    public function test_authenticated_user_can_fetch_their_details()
+    {
+        $user = User::factory()->create();
+        Passport::actingAs($user);
+
+        $this->getJson('/api/user')
+            ->assertStatus(200)
+            ->assertJsonPath('data.id', $user->id)
+            ->assertJsonPath('data.email', $user->email);
+    }
 }
