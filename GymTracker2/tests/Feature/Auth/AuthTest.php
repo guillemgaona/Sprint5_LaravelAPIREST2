@@ -85,5 +85,22 @@ class AuthTest extends TestCase
             ->assertJson(['error' => 'Unauthenticated']);
     }
 
-    
+    // LOGOUT TESTS
+    public function test_authenticated_user_can_logout()
+    {
+        $user = User::factory()->create();
+        Passport::actingAs($user);
+
+        $this->postJson('/api/logout')
+            ->assertStatus(200)
+            ->assertJson(['message' => 'Successfully logged out']);
+    }
+
+    public function test_unauthenticated_user_cannot_logout()
+    {
+        $this->postJson('/api/logout')
+            ->assertStatus(401); 
+    }
+
+ 
 }
