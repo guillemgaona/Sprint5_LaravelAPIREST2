@@ -49,5 +49,10 @@ class ExerciseDeleteTest extends TestCase
             ->assertStatus(401);
     }
 
-
+    public function test_delete_non_existent_exercise_returns_404()
+    {
+        Passport::actingAs($this->adminUser);
+        $this->deleteJson("/api/exercises/9999")
+            ->assertStatus(404);
+    }
 }
