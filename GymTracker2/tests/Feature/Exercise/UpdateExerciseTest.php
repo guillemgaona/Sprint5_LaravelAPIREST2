@@ -53,6 +53,20 @@ class ExerciseUpdateTest extends TestCase
         $this->putJson("/api/exercises/{$this->exercise->id}", ['name' => 'Attempted Update'])
             ->assertStatus(401);
     }
+    
+    public function test_update_exercise_fails_with_invalid_data()
+    {
+        Passport::actingAs($this->adminUser);
+        $this->putJson("/api/exercises/{$this->exercise->id}", ['muscle_group' => 'invalid_group'])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(['muscle_group']);
+    }
 
+    public function test_update_non_existent_exercise_returns_404()
+    {
+        Passport::actingAs($this->adminUser);
+        $this->putJson("/api/exercises/9999", ['name' => 'No Such Exercise'])
+            ->assertStatus(404);
+    }
 
 }
