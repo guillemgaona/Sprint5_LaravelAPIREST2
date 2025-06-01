@@ -25,5 +25,28 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/exercises', [ExerciseController::class, 'store'])->name('api.exercises.store')->middleware('role:admin');
     Route::put('/exercises/{exercise}', [ExerciseController::class, 'update'])->name('api.exercises.update')->middleware('role:admin');
     Route::delete('/exercises/{exercise}', [ExerciseController::class, 'destroy'])->name('api.exercises.destroy')->middleware('role:admin');
+
+
+    Route::get('/sessions', [TrainingSessionController::class, 'index'])->name('api.sessions.index.authuser');
+    Route::post('/sessions', [TrainingSessionController::class, 'store'])->name('api.sessions.store');
+
   
+    Route::get('/users/{user}/sessions', [TrainingSessionController::class, 'indexByUser'])->name('api.users.sessions.index');
+
+    
+    Route::get('/sessions/{trainingSession}', [TrainingSessionController::class, 'show'])->name('api.sessions.show');
+    Route::put('/sessions/{trainingSession}', [TrainingSessionController::class, 'update'])->name('api.sessions.update');
+    Route::delete('/sessions/{trainingSession}', [TrainingSessionController::class, 'destroy'])->name('api.sessions.destroy');
+
+
+    Route::get('/sessions/{trainingSession}/sets', [SetController::class, 'index'])->name('api.sessions.sets.index');
+    Route::post('/sessions/{trainingSession}/sets', [SetController::class, 'store'])->name('api.sessions.sets.store');
+
+    Route::get('/sets/{set}', [SetController::class, 'show'])->name('api.sets.show');
+    Route::put('/sets/{set}', [SetController::class, 'update'])->name('api.sets.update');
+    Route::delete('/sets/{set}', [SetController::class, 'destroy'])->name('api.sets.destroy');
+
+    Route::get('/users/{user}/stats/volume', [StatsController::class, 'volume'])->name('api.users.stats.volume');
+    Route::get('/users/{user}/stats/frequency', [StatsController::class, 'frequency'])->name('api.users.stats.frequency');
+    Route::get('/users/{user}/stats/personal-bests', [StatsController::class, 'personalBests'])->name('api.users.stats.personal_bests');
 });
