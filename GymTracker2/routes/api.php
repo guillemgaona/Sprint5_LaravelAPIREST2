@@ -18,6 +18,8 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('api.logout');
     Route::get('/user', [AuthController::class, 'user'])->name('api.auth.user');
 
-     Route::get('/users/{user}', [UserController::class, 'show'])->name('api.users.show');
+    Route::get('/users/{user}', [UserController::class, 'show'])->name('api.users.show');
+    Route::get('/exercises', [ExerciseController::class, 'index'])->name('api.exercises.index');
+    Route::get('/exercises/{exercise}', [ExerciseController::class, 'show'])->name('api.exercises.show');
 
 });
