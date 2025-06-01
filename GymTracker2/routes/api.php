@@ -24,5 +24,6 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/exercises/{exercise}', [ExerciseController::class, 'show'])->name('api.exercises.show');
     Route::post('/exercises', [ExerciseController::class, 'store'])->name('api.exercises.store')->middleware('role:admin');
     Route::put('/exercises/{exercise}', [ExerciseController::class, 'update'])->name('api.exercises.update')->middleware('role:admin');
-
+    Route::delete('/exercises/{exercise}', [ExerciseController::class, 'destroy'])->name('api.exercises.destroy')->middleware('role:admin');
+  
 });
