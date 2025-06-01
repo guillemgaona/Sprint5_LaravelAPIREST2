@@ -23,5 +23,6 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/exercises', [ExerciseController::class, 'index'])->name('api.exercises.index');
     Route::get('/exercises/{exercise}', [ExerciseController::class, 'show'])->name('api.exercises.show');
     Route::post('/exercises', [ExerciseController::class, 'store'])->name('api.exercises.store')->middleware('role:admin');
+    Route::put('/exercises/{exercise}', [ExerciseController::class, 'update'])->name('api.exercises.update')->middleware('role:admin');
 
 });
