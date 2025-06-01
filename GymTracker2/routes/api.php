@@ -9,6 +9,13 @@ use App\Http\Controllers\Api\TrainingSessionController;
 use App\Http\Controllers\Api\SetController;
 use App\Http\Controllers\Api\StatsController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:api');
+
+Route::post('/register', [AuthController::class, 'register'])->name('api.register');
+Route::post('/login', [AuthController::class, 'login'])->name('api.login');
+
+
+Route::middleware('auth:api')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('api.logout');
+    Route::get('/user', [AuthController::class, 'user'])->name('api.auth.user');
+
+});
