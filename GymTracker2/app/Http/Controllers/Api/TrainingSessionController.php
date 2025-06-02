@@ -51,5 +51,11 @@ class TrainingSessionController extends Controller
         return new TrainingSessionResource($trainingSession);
     }
 
- 
+     public function update(UpdateTrainingSessionRequest $request, TrainingSession $trainingSession)
+    {
+        
+        $this->authorize('update', $trainingSession); 
+        $trainingSession->update($request->validated());
+        return new TrainingSessionResource($trainingSession);
+    }
 }
