@@ -4,47 +4,32 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Exercise;
+use App\Http\Requests\StoreExerciseRequest; 
+use App\Http\Requests\UpdateExerciseRequest;
+use App\Http\Resources\ExerciseResource;
 use Illuminate\Http\Request;
 
 class ExerciseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        //
+ 
+        return ExerciseResource::collection(Exercise::paginate(10));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+
+    public function store(StoreExerciseRequest $request)
     {
-        //
+        $exercise = Exercise::create($request->validated());
+        return new ExerciseResource($exercise);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Exercise $exercise)
     {
-        //
+        return new ExerciseResource($exercise);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Exercise $exercise)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Exercise $exercise)
-    {
-        //
-    }
+
 }
