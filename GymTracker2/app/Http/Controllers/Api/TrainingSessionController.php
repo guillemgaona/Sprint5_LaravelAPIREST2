@@ -58,4 +58,11 @@ class TrainingSessionController extends Controller
         $trainingSession->update($request->validated());
         return new TrainingSessionResource($trainingSession);
     }
+
+        public function destroy(TrainingSession $trainingSession)
+    {
+        $this->authorize('delete', $trainingSession);
+        $trainingSession->delete();
+        return response()->json(null, 204);
+    }
 }
