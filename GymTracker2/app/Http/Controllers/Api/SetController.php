@@ -39,5 +39,13 @@ class SetController extends Controller
         return new SetResource($set);
     }
 
+    public function update(UpdateSetRequest $request, Set $set)
+    {
+        $this->authorize('update', $set);
+
+        $set->update($request->validated());
+        $set->load('exercise');
+        return new SetResource($set);
+    }
 
 }
