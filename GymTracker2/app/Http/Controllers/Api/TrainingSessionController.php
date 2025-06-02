@@ -4,47 +4,52 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\TrainingSession;
+use App\Models\User;
+use App\Http\Requests\StoreTrainingSessionRequest;
+use App\Http\Requests\UpdateTrainingSessionRequest;
+use App\Http\Resources\TrainingSessionResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TrainingSessionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        //
+        $user = Auth::user();
+        $sessions = TrainingSession::where('user_id', $user->id)
+            ->orderBy('date', 'desc')
+            ->paginate(10);
+        return TrainingSessionResource::collection($sessions);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+
+    public function indexByUser(User $user)
     {
-        //
+
+        $this->authorize('viewSessionsOf', $user); 
+
+        $sessions = TrainingSession::where('user_id', $user->id)
+            ->orderBy('date', 'desc')
+            ->paginate(10);
+        return TrainingSessionResource::collection($sessions);
     }
 
-    /**
-     * Display the specified resource.
-     */
+    public function store(StoreTrainingSessionRequest $request)
+    {
+        $validatedData = $request->validated();
+        $validatedData['user_id'] = Auth::id();
+
+        $trainingSession = TrainingSession::create($validatedData);
+        return new TrainingSessionResource($trainingSession);
+    }
+
+
     public function show(TrainingSession $trainingSession)
     {
-        //
+        $this->authorize('view', $trainingSession); 
+        return new TrainingSessionResource($trainingSession);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, TrainingSession $trainingSession)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(TrainingSession $trainingSession)
-    {
-        //
-    }
+ 
 }
