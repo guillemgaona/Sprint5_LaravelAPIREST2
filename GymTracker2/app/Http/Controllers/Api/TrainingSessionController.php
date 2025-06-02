@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\TrainingSession;
 use App\Models\User;
-use App\Http\Requests\StoreTrainingSessionRequest; // Crea este FormRequest
-use App\Http\Requests\UpdateTrainingSessionRequest; // Crea este FormRequest
-use App\Http\Resources\TrainingSessionResource;   // Crea este API Resource
+use App\Http\Requests\StoreTrainingSessionRequest;
+use App\Http\Requests\UpdateTrainingSessionRequest;
+use App\Http\Resources\TrainingSessionResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
