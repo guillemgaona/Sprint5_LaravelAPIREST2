@@ -30,6 +30,10 @@ class ExerciseController extends Controller
         return new ExerciseResource($exercise);
     }
 
-
+    public function update(UpdateExerciseRequest $request, Exercise $exercise)
+    {
+        $exercise->update($request->validated());
+        return new ExerciseResource($exercise);
+    }
 
 }
