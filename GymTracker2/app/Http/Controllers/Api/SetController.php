@@ -48,4 +48,10 @@ class SetController extends Controller
         return new SetResource($set);
     }
 
+    public function destroy(Set $set)
+    {
+        $this->authorize('delete', $set);
+        $set->delete();
+        return response()->json(null, 204);
+    }
 }
