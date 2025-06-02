@@ -36,4 +36,9 @@ class ExerciseController extends Controller
         return new ExerciseResource($exercise);
     }
 
+    public function destroy(Exercise $exercise)
+    {
+        $exercise->delete();
+        return response()->json(null, 204);
+    }
 }
