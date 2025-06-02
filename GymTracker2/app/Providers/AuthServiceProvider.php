@@ -18,6 +18,7 @@ class AuthServiceProvider extends ServiceProvider
 
     protected $policies = [
         TrainingSession::class => TrainingSessionPolicy::class,
+        Set::class => SetPolicy::class,
 
     ];
 
