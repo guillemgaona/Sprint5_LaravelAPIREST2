@@ -4,47 +4,40 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Set;
+use App\Models\TrainingSession;
+use App\Http\Requests\StoreSetRequest;   
+use App\Http\Requests\UpdateSetRequest;
+use App\Http\Resources\SetResource;
 use Illuminate\Http\Request;
 
 class SetController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    public function index(TrainingSession $trainingSession)
     {
-        //
+        $this->authorize('view', $trainingSession);
+
+        return SetResource::collection($trainingSession->sets()->with('exercise')->paginate(15));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StoreSetRequest $request, TrainingSession $trainingSession)
     {
-        //
+        $this->authorize('addSet', $trainingSession);
+
+        $validatedData = $request->validated();
+        $set = $trainingSession->sets()->create($validatedData);
+        $set->load('exercise');
+
+        return new SetResource($set);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Set $set)
     {
-        //
+        $this->authorize('view', $set); 
+
+        $set->load('exercise', 'trainingSession.user');
+        return new SetResource($set);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Set $set)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Set $set)
-    {
-        //
-    }
 }
