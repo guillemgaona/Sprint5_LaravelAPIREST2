@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('exercises', function (Blueprint $table) {
-            $table->id(); 
-            $table->string('name'); 
-            $table->enum('muscle_group', ['chest', 'back', 'legs', 'shoulders', 'arms', 'core', 'other']); // Corresponds to grupo_muscular
+            $table->id();
+            $table->string('name');
+            $table->enum('muscle_group', ['chest', 'back', 'legs', 'shoulders', 'arms', 'core', 'other']);
             $table->text('description')->nullable(); 
-            $table->string('demo_image_url', 255)->nullable(); 
-            $table->timestamps(); 
+            $table->string('demo_image_url')->nullable();
+            $table->timestamps();
         });
     }
 
