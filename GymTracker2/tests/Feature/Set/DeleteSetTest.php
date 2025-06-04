@@ -11,7 +11,7 @@ use Laravel\Passport\Passport;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
-class SetDeleteTest extends TestCase
+class DeleteSetTest extends TestCase
 {
     use RefreshDatabase;
 

@@ -11,7 +11,7 @@ use Laravel\Passport\Passport;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
-class SetUpdateTest extends TestCase
+class UpdateSetTest extends TestCase
 {
     use RefreshDatabase;
 

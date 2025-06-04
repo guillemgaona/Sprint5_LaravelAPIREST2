@@ -11,7 +11,7 @@ use Laravel\Passport\Passport;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
-class SetReadTest extends TestCase
+class ReadSetTest extends TestCase
 {
     use RefreshDatabase;
 

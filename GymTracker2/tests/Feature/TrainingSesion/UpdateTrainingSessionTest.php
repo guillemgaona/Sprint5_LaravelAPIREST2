@@ -10,7 +10,7 @@ use Laravel\Passport\Passport;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
-class TrainingSessionUpdateTest extends TestCase
+class UpdateTrainingSessionTest extends TestCase
 {
     use RefreshDatabase;
 

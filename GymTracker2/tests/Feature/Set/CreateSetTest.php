@@ -10,7 +10,7 @@ use Laravel\Passport\Passport;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
-class SetCreateTest extends TestCase
+class CreateSetTest extends TestCase
 {
     use RefreshDatabase;
 

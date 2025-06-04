@@ -8,7 +8,7 @@ use Laravel\Passport\Passport;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
-class ExerciseCreateTest extends TestCase
+class CreateExerciseTest extends TestCase
 {
     use RefreshDatabase;
 
