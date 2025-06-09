@@ -18,11 +18,15 @@ class CreateExerciseTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'api']);
-        Role::firstOrCreate(['name' => 'user', 'guard_name' => 'api']);
 
-        $this->adminUser = User::factory()->create()->assignRole('admin');
-        $this->regularUser = User::factory()->create()->assignRole('user');
+        // Create Roles for the 'api' guard and store them in variables
+        $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'api']);
+        $userRole = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'api']);
+
+        // Create users and assign the role *objects* directly.
+        // This ensures the correct guard ('api') is used.
+        $this->adminUser = User::factory()->create()->assignRole($adminRole);
+        $this->regularUser = User::factory()->create()->assignRole($userRole);
     }
 
     public function test_admin_can_create_exercise()
@@ -54,8 +58,8 @@ class CreateExerciseTest extends TestCase
         $this->postJson('/api/exercises', ['name' => 'Test', 'muscle_group' => 'arms'])
             ->assertStatus(401);
     }
-    
-     public function test_create_exercise_fails_with_missing_required_fields()
+
+    public function test_create_exercise_fails_with_missing_required_fields()
     {
         Passport::actingAs($this->adminUser);
         $this->postJson('/api/exercises', ['name' => 'Only Name'])
@@ -70,5 +74,5 @@ class CreateExerciseTest extends TestCase
         $this->postJson('/api/exercises', $exerciseData)
             ->assertStatus(422)
             ->assertJsonValidationErrors(['muscle_group']);
-    }   
+    }
 }

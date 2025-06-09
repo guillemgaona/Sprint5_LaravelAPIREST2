@@ -23,12 +23,12 @@ class StatsTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        Role::firstOrCreate(['name' => 'user', 'guard_name' => 'api']);
-        Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'api']);
+        $userRole = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'api']);
+        $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'api']);
 
-        $this->targetUser = User::factory()->create()->assignRole('user');
+        $this->targetUser = User::factory()->create()->assignRole($userRole);
         $this->requestingUser = $this->targetUser; 
-        $this->adminUser = User::factory()->create()->assignRole('admin');
+        $this->adminUser = User::factory()->create()->assignRole($adminRole);
 
         
         $chestExercise = Exercise::factory()->create(['muscle_group' => 'chest']);
@@ -54,18 +54,27 @@ class StatsTest extends TestCase
         $response = $this->getJson("/api/users/{$this->targetUser->id}/stats/volume");
 
         $response->assertStatus(200)
-                 ->assertJsonFragment(['muscle_group' => 'chest', 'total_volume' => 1000.00 + 1080.00]) // 2080
-                 ->assertJsonFragment(['muscle_group' => 'legs', 'total_volume' => 1200.00]);
+             ->assertJsonFragment(['muscle_group' => 'chest', 'total_volume' => "2080.00"])
+             ->assertJsonFragment(['muscle_group' => 'legs', 'total_volume' => "1200.00"]);
     }
 
     
     public function test_user_can_get_their_session_frequency_per_week()
-    {
-        Passport::actingAs($this->requestingUser);
-        $response = $this->getJson("/api/users/{$this->targetUser->id}/stats/frequency");
-        $response->assertStatus(200);
-        $response->assertJsonStructure(['data' => [['week_start_date', 'week_end_date', 'session_count']]]);
-    }
+{
+    Passport::actingAs($this->requestingUser);
+    $response = $this->getJson("/api/users/{$this->targetUser->id}/stats/frequency");
+    
+    $response->assertStatus(200)
+             ->assertJsonStructure([
+                 'data' => [
+                     '*' => [
+                         'week_start_date',
+                         'week_end_date',
+                         'session_count'
+                     ]
+                 ]
+             ]);
+}
 
 
 
@@ -93,7 +102,8 @@ class StatsTest extends TestCase
 
     public function test_user_cannot_get_stats_for_another_user_if_restricted()
     {
-        $anotherUser = User::factory()->create()->assignRole('user');
+        $userRole = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'api']);
+        $anotherUser = User::factory()->create()->assignRole($userRole);
         Passport::actingAs($anotherUser);
         $this->getJson("/api/users/{$this->targetUser->id}/stats/volume")->assertStatus(403);
         $this->getJson("/api/users/{$this->targetUser->id}/stats/frequency")->assertStatus(403);

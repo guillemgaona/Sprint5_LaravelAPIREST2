@@ -9,7 +9,7 @@ use Laravel\Passport\Passport;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
-class TrainingSessionReadTest extends TestCase
+class ReadTrainingSessionTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -21,12 +21,12 @@ class TrainingSessionReadTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        Role::firstOrCreate(['name' => 'user', 'guard_name' => 'api']);
-        Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'api']);
+        $userRole = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'api']);
+        $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'api']);
 
-        $this->ownerUser = User::factory()->create()->assignRole('user');
-        $this->anotherUser = User::factory()->create()->assignRole('user');
-        $this->adminUser = User::factory()->create()->assignRole('admin');
+        $this->ownerUser = User::factory()->create()->assignRole($userRole);
+        $this->anotherUser = User::factory()->create()->assignRole($userRole);
+        $this->adminUser = User::factory()->create()->assignRole($adminRole);
 
         $this->ownerSession = TrainingSession::factory()->for($this->ownerUser)->create();
         TrainingSession::factory()->count(2)->for($this->ownerUser)->create();

@@ -23,12 +23,13 @@ class UpdateSetTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        Role::firstOrCreate(['name' => 'user', 'guard_name' => 'api']);
-        Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'api']);
+        
+        $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'api']);
+        $userRole = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'api']);
 
-        $this->setOwner = User::factory()->create()->assignRole('user');
-        $this->anotherUser = User::factory()->create()->assignRole('user');
-        $this->adminUser = User::factory()->create()->assignRole('admin');
+        $this->setOwner = User::factory()->create()->assignRole($userRole);
+        $this->anotherUser = User::factory()->create()->assignRole($userRole);
+        $this->adminUser = User::factory()->create()->assignRole($adminRole);
 
         $session = TrainingSession::factory()->for($this->setOwner)->create();
         $exercise = Exercise::factory()->create();
@@ -44,17 +45,17 @@ class UpdateSetTest extends TestCase
         $this->putJson("/api/sets/{$this->ownerSet->id}", $updateData)
             ->assertStatus(200)
             ->assertJsonPath('data.repetitions', 12)
-            ->assertJsonPath('data.weight', '55.75'); 
+            ->assertJsonPath('data.weight', 55.75); 
         $this->assertDatabaseHas('sets', ['id' => $this->ownerSet->id, 'repetitions' => 12, 'weight' => 55.75]);
     }
 
     public function test_admin_can_update_any_set()
     {
         Passport::actingAs($this->adminUser);
-        $updateData = ['repetitions' => 5, 'weight' => 100.00];
+        $updateData = ['repetitions' => 5, 'weight' => 200.00];
         $this->putJson("/api/sets/{$this->ownerSet->id}", $updateData)
             ->assertStatus(200)
-            ->assertJsonPath('data.weight', '100.00');
+            ->assertJsonPath('data.weight',200);
     }
 
     public function test_user_cannot_update_set_in_another_users_session()

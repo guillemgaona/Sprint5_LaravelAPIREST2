@@ -23,12 +23,12 @@ class DeleteSetTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        Role::firstOrCreate(['name' => 'user', 'guard_name' => 'api']);
-        Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'api']);
+        $userRole = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'api']);
+        $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'api']);
 
-        $this->setOwner = User::factory()->create()->assignRole('user');
-        $this->anotherUser = User::factory()->create()->assignRole('user');
-        $this->adminUser = User::factory()->create()->assignRole('admin');
+        $this->setOwner = User::factory()->create()->assignRole($userRole);
+        $this->anotherUser = User::factory()->create()->assignRole($userRole);
+        $this->adminUser = User::factory()->create()->assignRole($adminRole);
 
         $session = TrainingSession::factory()->for($this->setOwner)->create();
         $exercise = Exercise::factory()->create();

@@ -9,7 +9,7 @@ use Laravel\Passport\Passport;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
-class CreateTrainingSessionTestTest extends TestCase
+class CreateTrainingSessionTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -18,8 +18,8 @@ class CreateTrainingSessionTestTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        Role::firstOrCreate(['name' => 'user', 'guard_name' => 'api']);
-        $this->testUser = User::factory()->create()->assignRole('user');
+        $userRole = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'api']);
+        $this->testUser = User::factory()->create()->assignRole($userRole);
         Passport::actingAs($this->testUser);
     }
 

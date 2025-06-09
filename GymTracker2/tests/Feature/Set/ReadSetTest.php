@@ -24,12 +24,12 @@ class ReadSetTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        Role::firstOrCreate(['name' => 'user', 'guard_name' => 'api']);
-        Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'api']);
+        $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'api']);
+        $userRole = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'api']);
 
-        $this->sessionOwner = User::factory()->create()->assignRole('user');
-        $this->anotherUser = User::factory()->create()->assignRole('user');
-        $this->adminUser = User::factory()->create()->assignRole('admin');
+        $this->sessionOwner = User::factory()->create()->assignRole($userRole);
+        $this->anotherUser = User::factory()->create()->assignRole($userRole);
+        $this->adminUser = User::factory()->create()->assignRole($adminRole);
 
         $this->ownerSession = TrainingSession::factory()->for($this->sessionOwner)->create();
         $exercise = Exercise::factory()->create();

@@ -45,22 +45,14 @@ class StatsController extends Controller
             ->select(
                 DB::raw('YEAR(date) as year'),
                 DB::raw('WEEK(date, 1) as week_number'),
-                DB::raw('DATE_FORMAT(MIN(date), "%Y-%m-%d") as week_start_actual_date'), 
-                DB::raw('DATE_FORMAT(MAX(date), "%Y-%m-%d") as week_end_actual_date'),
+                DB::raw('DATE_FORMAT(MIN(date), "%Y-%m-%d") as week_start_date'), 
+                DB::raw('DATE_FORMAT(MAX(date), "%Y-%m-%d") as week_end_date'),
                 DB::raw('COUNT(id) as session_count')
             )
             ->groupBy('year', 'week_number')
             ->orderBy('year', 'desc')
             ->orderBy('week_number', 'desc')
-            ->get()
-            ->map(function ($weekData) {
-                $theoreticalStartDate = Carbon::now()->setISODate($weekData->year, $weekData->week_number)->startOfWeek(Carbon::MONDAY);
-                $theoreticalEndDate = Carbon::now()->setISODate($weekData->year, $weekData->week_number)->endOfWeek(Carbon::SUNDAY);
-
-                $weekData->theoretical_week_start_date = $theoreticalStartDate->toDateString();
-                $weekData->theoretical_week_end_date = $theoreticalEndDate->toDateString();
-                return $weekData;
-            });
+            ->get();
 
         return response()->json(['data' => $sessions]);
     }
