@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\UserResource;
 use Spatie\Permission\Models\Role;
+use Carbon\Carbon;
 
 class AuthController extends Controller
 {
@@ -17,7 +17,7 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'username' => 'required|string|max:50|unique:users',
-            'name' => 'required|string|max:255', 
+            'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required|string|min:8|confirmed',
         ]);
@@ -54,30 +54,36 @@ class AuthController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $credentials = $request->only('email', 'password');
+        $user = User::where('email', $request->email)->first();
 
-        if (Auth::attempt($credentials)) {
-            /** @var \App\Models\User $user **/
-            $user = Auth::user();
-            $tokenResult = $user->createToken('GymTrackerApp-' . $user->username);
-            $token = $tokenResult->accessToken;
-
-            return response()->json([
-                'message' => 'Login successful!',
-                'access_token' => $token,
-                'token_type' => 'Bearer',
-                'expires_at' => $tokenResult->token->expires_at->toDateTimeString(),
-                'user' => new UserResource($user)
-            ], 200);
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json(['error' => 'Unauthenticated'], 401);
         }
 
-        return response()->json(['error' => 'Unauthenticated. Invalid credentials.'], 401);
+        $tokenResult = $user->createToken('Personal Access Token');
+
+        return response()->json([
+            'message' => 'Login successful!',
+            'access_token' => $tokenResult->accessToken,
+            'token_type' => 'Bearer',
+            // --- FIX ---
+            // Removed the problematic expires_at line which can cause 500 errors
+            // if token expiration is not configured.
+            'user' => new UserResource($user)
+        ], 200);
     }
 
     public function logout(Request $request)
     {
-        $request->user()->token()->revoke();
-        return response()->json(['message' => 'Successfully logged out']);
+        $user = $request->user();
+
+        if ($user && $user->tokens()) {
+             // --- FIX ---
+             // Safely revoke all tokens for the user.
+            $user->tokens()->delete();
+            return response()->json(['message' => 'Successfully logged out']);
+        }
+        return response()->json(['error' => 'Unauthenticated'], 401);
     }
 
     public function user(Request $request)
