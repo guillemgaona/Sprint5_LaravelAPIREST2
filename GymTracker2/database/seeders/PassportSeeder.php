@@ -24,8 +24,7 @@ class PassportSeeder extends Seeder
                 'secret' => 'aBcDeFgHiJkLmNoPqRsTuVwXyZ1234567890aBcDeFgHiJkLmNoPqRsTuVwXyZ1234567890aBcDeFgHiJkLmNoPqRsTuVwXyZ1',
                 'provider' => null,
                 'redirect_uris' => 'http://localhost',
-                // --- LA CORRECCIÓN CLAVE ---
-                // Se guarda como una cadena de texto en formato JSON
+                // --- La Corrección Clave ---
                 'grant_types' => json_encode(['personal_access']),
                 'revoked' => false,
                 'created_at' => now(),
@@ -39,8 +38,7 @@ class PassportSeeder extends Seeder
                 'secret' => '0987654321ZyXwVuTsRqPoNmLkJiHgFeDcBa0987654321ZyXwVuTsRqPoNmLkJiHgFeDcBa0987654321ZyXwVuTsRqPoNm',
                 'provider' => 'users',
                 'redirect_uris' => 'http://localhost',
-                // --- LA CORRECCIÓN CLAVE ---
-                // Se guarda como una cadena de texto en formato JSON
+                // --- La Corrección Clave ---
                 'grant_types' => json_encode(['password']),
                 'revoked' => false,
                 'created_at' => now(),
