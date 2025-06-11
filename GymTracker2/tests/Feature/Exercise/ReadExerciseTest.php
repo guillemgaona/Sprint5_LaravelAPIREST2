@@ -9,7 +9,7 @@ use Laravel\Passport\Passport;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
-class ExerciseReadTest extends TestCase
+class ReadExerciseTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -18,8 +18,8 @@ class ExerciseReadTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        Role::firstOrCreate(['name' => 'user', 'guard_name' => 'api']); 
-        $this->testUser = User::factory()->create()->assignRole('user');
+        $testUser = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'api']); 
+        $this->testUser = User::factory()->create()->assignRole($testUser);
         Passport::actingAs($this->testUser);
     }
 
@@ -56,8 +56,11 @@ class ExerciseReadTest extends TestCase
 
     public function test_unauthenticated_user_cannot_get_exercise_details()
     {
-        Passport::actingAs($this->testUser);
-        $this->getJson('/api/exercises/1')
+        $exercise = Exercise::factory()->create();
+        
+        $this->refreshApplication();
+        
+        $this->getJson("/api/exercises/{$exercise->id}")
             ->assertStatus(401);
     }
 

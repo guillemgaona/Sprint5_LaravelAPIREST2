@@ -1,61 +1,183 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🎉 sprint5-GymTracker-api
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A RESTful API for tracking gym workouts, featuring authentication, user roles, and statistics calculation, built with Laravel.
+**Note:** This is an API-only project (no web views are included).
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **User Management:** Register, login, profile management, and role assignment.
+- **Exercise Management:** Paginated list of exercises and full CRUD functionality for administrators.
+- **Workout Tracking:** Creation, update, and deletion of training sessions per user.
+- **Set Tracking:** Logging of sets per session, including repetitions and weight.
+- **Performance Statistics:** Calculation of training volume by muscle group, workout frequency, and personal records (PRs).
+- **OAuth2 Authentication:** Secure endpoints with Laravel Passport.
+- **Role-Based Access:** 'user' and 'admin' roles with different permissions, managed with Spatie.
+- **Functional Testing:** Automated tests with PHPUnit covering all API routes.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 👤 User Roles
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **User:** Manages their own profile, tracks and manages their training sessions and sets, views the exercise list, and sees their own stats.
+- **Admin:** Manages all exercises (create, edit, delete), has full API access.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 📚 Main Endpoints
 
-## Laravel Sponsors
+See routes/api.php for the full list.
+Some examples:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- `POST /api/register` — Register a new user
+- `POST /api/login` — Login
+- `GET /api/exercises` — List all exercises
+- `POST /api/exercises` — Create a new exercise (admin only)
+- `POST /api/sessions` — Create a new training session (auth required)
+- `POST /api/sessions/{id_session}/sets` — Add a set to a session
+- `GET /api/users/{id_user}/stats/volume` — Get a user's training volume
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## ⚙️ Installation & Usage
 
-## Contributing
+> **You do NOT need to have Laravel installed globally.**  
+> All dependencies are managed via Composer.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 1. Requirements
 
-## Code of Conduct
+- PHP 8.2 or higher
+- Composer (https://getcomposer.org/)
+- MySQL (for development)
+- SQLite (for testing, in-memory)
+- Git (recommended)
+- XAMPP or similar stack for Windows users
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 2. Clone the repository
 
-## Security Vulnerabilities
+```sh
+git clone https://github.com/guillemgaona/Sprint5_LaravelAPIREST2.git
+cd GymTracker2
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 3. Install dependencies
 
-## License
+```sh
+composer install
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+If you get an error about the `ext-sodium` or `ext-gd` extension, enable them in your `php.ini`:
+- Open your `php.ini` (e.g. `C:\xampp\php\php.ini`)
+- Find `;extension=sodium` and/or `;extension=gd` and remove the `;`
+- Save and restart Apache
+
+### 4. Environment setup
+
+Copy the example environment file and generate the app key:
+
+```sh
+cp .env.example .env
+php artisan key:generate
+```
+
+### 5. Database setup
+
+By default, the application uses MySQL for development.
+Make sure your .env file has the correct MySQL settings, for example:
+
+Create the gymtracker database in your MySQL server before running migrations.
+
+You can use phpMyAdmin, MySQL Workbench, or the command line:
+
+Note:
+The automated tests use an in-memory SQLite database, so you do not need to configure SQLite for development.
+
+> **Note:**  
+> The automated tests use an in-memory SQLite database, so you do **not** need to configure SQLite for development.
+
+### 6. Run migrations and seeders
+
+This command will create all tables and populate them with sample data (roles, users, exercises, etc.).
+```sh
+php artisan migrate --seed
+```
+
+### 7. Install Passport
+
+```sh
+php artisan passport:install
+```
+This command will create the access clients and encryption keys necessary for OAuth2 authentication.
+
+If they are already create a personal acces Oauth client: 
+
+```sh
+php artisan passport:client --personal
+```
+
+---
+
+## 🧪 Running Feature Tests
+
+**This is the main way to verify the API.**
+
+```sh
+php artisan test --testsuite=Feature
+```
+
+Or simply:
+
+```sh
+php artisan test
+```
+
+All tests in [`tests/Feature`](tests/Feature) will be executed.
+
+---
+
+## ⚠️ Troubleshooting
+
+### Duplicate Passport Migration Files
+
+If you see errors like table 'oauth_auth_codes' already exists during migrations, you may have duplicate Passport migration files.  
+**Solution:**  
+- Check your database/migrations folder.
+- Keep only one migration file for each Passport table (oauth_auth_codes, oauth_access_tokens, etc.).
+- Delete any duplicates (files with similar names but different timestamps).
+
+### Other Common Issues
+
+- **Tests fail due to database:** Make sure your `phpunit.xml` contains:
+  ```xml
+  <env name="DB_CONNECTION" value="sqlite"/>
+  <env name="DB_DATABASE" value=":memory:"/>
+  ```
+- **Cache issues:** Run `php artisan config:clear` and `php artisan cache:clear`.
+
+---
+
+## 📁 Project Structure
+
+- Controllers: app/Http/Controllers/Api
+- Models: app/Models
+- Policies: app/Policies
+- Form Requests: app/Http/Requests
+- API Resources: app/Http/Resources
+- API Routes: routes/api.php
+- Feature Tests: tests/Feature
+
+---
+
+## ❓ FAQ
+
+- **Do I need to install Laravel globally?**  
+  No, everything is handled via Composer.
+
+- **Is there a frontend?**  
+  No, this is an API-only project.
+
+- **How do I test the API?**  
+ Run the feature tests as described above, or use an API client like Postman.
+
+---

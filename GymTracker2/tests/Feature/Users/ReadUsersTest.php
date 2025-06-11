@@ -8,7 +8,7 @@ use Laravel\Passport\Passport;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
-class UserTest extends TestCase
+class ReadUsersTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -19,12 +19,12 @@ class UserTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'api']);
-        Role::firstOrCreate(['name' => 'user', 'guard_name' => 'api']);
+        $userRole = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'api']);
+        $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'api']);
 
-        $this->adminUser = User::factory()->create()->assignRole('admin');
-        $this->regularUser = User::factory()->create()->assignRole('user');
-        $this->anotherUser = User::factory()->create()->assignRole('user');
+        $this->adminUser = User::factory()->create()->assignRole($adminRole);
+        $this->regularUser = User::factory()->create()->assignRole($userRole);
+        $this->anotherUser = User::factory()->create()->assignRole($userRole);
     }
 
     public function test_admin_can_get_any_user_information()

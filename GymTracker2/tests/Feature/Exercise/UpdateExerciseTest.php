@@ -9,7 +9,7 @@ use Laravel\Passport\Passport;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
-class ExerciseUpdateTest extends TestCase
+class UpdateExerciseTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -20,11 +20,12 @@ class ExerciseUpdateTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'api']);
-        Role::firstOrCreate(['name' => 'user', 'guard_name' => 'api']);
+        $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'api']);
+        $userRole = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'api']);
 
-        $this->adminUser = User::factory()->create()->assignRole('admin');
-        $this->regularUser = User::factory()->create()->assignRole('user');
+
+        $this->adminUser = User::factory()->create()->assignRole($adminRole);
+        $this->regularUser = User::factory()->create()->assignRole($userRole);
         $this->exercise = Exercise::factory()->create(['name' => 'Old Name']);
     }
 
