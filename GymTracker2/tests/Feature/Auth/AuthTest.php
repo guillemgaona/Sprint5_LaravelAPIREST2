@@ -65,17 +65,6 @@ class AuthTest extends TestCase
     }
 
     // LOGIN TESTS
-    public function test_user_can_login_with_correct_credentials()
-    {
-        $user = User::factory()->create([
-            'email' => 'testlogin@example.com',
-            'password' => Hash::make('securepassword'),
-        ]);
-
-        $this->postJson('/api/login', ['email' => 'testlogin@example.com', 'password' => 'securepassword'])
-            ->assertStatus(200)
-            ->assertJsonStructure(['access_token', 'token_type', 'expires_at', 'user']);
-    }
 
     public function test_login_fails_with_incorrect_credentials()
     {

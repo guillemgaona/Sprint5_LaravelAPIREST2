@@ -45,6 +45,7 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email',
             'password' => 'required|string',
@@ -53,9 +54,9 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-
+ 
         $user = User::where('email', $request->email)->first();
-
+        
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json(['error' => 'Unauthenticated'], 401);
         }
@@ -66,9 +67,6 @@ class AuthController extends Controller
             'message' => 'Login successful!',
             'access_token' => $tokenResult->accessToken,
             'token_type' => 'Bearer',
-            // --- FIX ---
-            // Removed the problematic expires_at line which can cause 500 errors
-            // if token expiration is not configured.
             'user' => new UserResource($user)
         ], 200);
     }
@@ -78,8 +76,6 @@ class AuthController extends Controller
         $user = $request->user();
 
         if ($user && $user->tokens()) {
-             // --- FIX ---
-             // Safely revoke all tokens for the user.
             $user->tokens()->delete();
             return response()->json(['message' => 'Successfully logged out']);
         }
