@@ -10,6 +10,19 @@ use Laravel\Passport\Contracts\OAuthenticatable;
 use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * @OA\Schema(
+ * schema="UserResource",
+ * type="object",
+ * title="User Resource",
+ * @OA\Property(property="id", type="integer", example=1),
+ * @OA\Property(property="username", type="string", example="johndoe"),
+ * @OA\Property(property="name", type="string", example="John Doe"),
+ * @OA\Property(property="email", type="string", format="email", example="user@example.com"),
+ * @OA\Property(property="registration_date", type="string", format="date-time", example="2025-06-11T12:00:00Z")
+ * )
+ */
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
