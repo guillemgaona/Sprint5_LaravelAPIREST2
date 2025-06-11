@@ -53,6 +53,7 @@ Some examples:
 - SQLite (for testing, in-memory)
 - Git (recommended)
 - XAMPP or similar stack for Windows users
+- Swagger (recommended)
 
 ### 2. Clone the repository
 
@@ -85,6 +86,13 @@ php artisan key:generate
 
 By default, the application uses MySQL for development.
 Make sure your .env file has the correct MySQL settings, for example:
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=gymtracker
+DB_USERNAME=root
+DB_PASSWORD=
 
 Create the gymtracker database in your MySQL server before running migrations.
 
@@ -135,6 +143,26 @@ php artisan test
 All tests in [`tests/Feature`](tests/Feature) will be executed.
 
 ---
+## 📖 API Documentation (Swagger)
+
+This project uses l5-swagger to generate interactive API documentation from OpenAPI annotations in the code.
+
+1. Generate the Documentation
+The documentation is not generated automatically. Any time you add or change the API annotations in the source code, you must run this command to update the documentation file:
+
+```sh
+php artisan l5-swagger:generate
+```
+2. View the Documentation
+Once generated, you can view the interactive documentation by running the local server:
+
+```sh
+php artisan serve
+```
+
+And then navigating to the following URL in your web browser:
+
+http://127.0.0.1:8000/api/documentation
 
 ## ⚠️ Troubleshooting
 
