@@ -24,7 +24,9 @@ class DatabaseSeeder extends Seeder
             RoleAndPermissionSeeder::class,
             PassportSeeder::class,
             UserSeeder::class,
-            ExerciseSeeder::class,
+            ExerciseSeeder::class,  
+            TrainingSessionSeeder::class, 
+            SetSeeder::class,
         ]);
     }
 }
