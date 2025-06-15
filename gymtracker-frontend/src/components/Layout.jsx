@@ -37,6 +37,9 @@ const Layout = () => {
           <Link as={RouterLink} to="/sessions" p={2} mr={4}>
             My Sessions
           </Link>
+          <Link as={RouterLink} to="/stats" p={2} mr={4}>
+            My Stats
+          </Link>
           <Button colorScheme="red" onClick={handleLogout}>
             Logout ({user?.name})
           </Button>

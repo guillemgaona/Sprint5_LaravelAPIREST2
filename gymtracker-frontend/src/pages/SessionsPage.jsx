@@ -43,7 +43,7 @@ const SessionsPage = () => {
             <Box key={session.id} p={5} shadow="md" borderWidth="1px">
               <HStack justify="space-between">
                 <Heading fontSize="xl">{`Session on ${session.date}`}</Heading>
-                {/* <Link as={RouterLink} to={`/sessions/${session.id}`} color="blue.500">View Details</Link> */}
+                {<Link as={RouterLink} to={`/sessions/${session.id}`} color="blue.500">View Details</Link>}
               </HStack>
               <Text mt={4}>{session.notes || 'No notes for this session.'}</Text>
             </Box>

@@ -1,13 +1,15 @@
 // src/App.jsx
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage'; // Importar
+import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
-import ExercisesPage from './pages/ExercisesPage'; // Importar
-import SessionsPage from './pages/SessionsPage';   // Importar
-import CreateSessionPage from './pages/CreateSessionPage'; // Importar
+import ExercisesPage from './pages/ExercisesPage';
+import SessionsPage from './pages/SessionsPage';
+import CreateSessionPage from './pages/CreateSessionPage';
+import SessionDetailPage from './pages/SessionDetailPage'; // <-- Importar
+import StatsPage from './pages/StatsPage'; // <-- Importar
 import ProtectedRoute from './components/ProtectedRoute';
-import Layout from './components/Layout'; // Importar
+import Layout from './components/Layout';
 
 const router = createBrowserRouter([
   { path: '/login', element: <LoginPage /> },
@@ -20,13 +22,13 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
     children: [
-      { index: true, element: <Navigate to="/dashboard" replace /> }, // Redirigir de / a /dashboard
+      { index: true, element: <Navigate to="/dashboard" replace /> },
       { path: 'dashboard', element: <DashboardPage /> },
       { path: 'exercises', element: <ExercisesPage /> },
       { path: 'sessions', element: <SessionsPage /> },
       { path: 'sessions/new', element: <CreateSessionPage /> },
-      // { path: 'sessions/:id', element: <SessionDetailPage /> }, // Añadiremos esta después
-      // { path: 'stats', element: <StatsPage /> }, // Añadiremos esta después
+      { path: 'sessions/:sessionId', element: <SessionDetailPage /> }, // <-- Ruta nueva
+      { path: 'stats', element: <StatsPage /> }, // <-- Ruta nueva
     ],
   },
 ]);

@@ -1,0 +1,112 @@
+// src/pages/StatsPage.jsx
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../hooks/useAuth';
+import { getVolumeStats, getFrequencyStats, getPersonalBests } from '../api/statsService';
+import {
+  Box, Heading, SimpleGrid, Spinner, Alert, AlertIcon, Stat, StatLabel, StatNumber, StatHelpText, VStack, Table, Thead, Tbody, Tr, Th, Td, TableContainer,
+} from '@chakra-ui/react';
+
+const StatsPage = () => {
+  const { user } = useAuth();
+  const [stats, setStats] = useState({ volume: [], frequency: [], prs: [] });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchAllStats = async () => {
+      try {
+        const [volumeRes, frequencyRes, prsRes] = await Promise.all([
+          getVolumeStats(user.id),
+          getFrequencyStats(user.id),
+          getPersonalBests(user.id),
+        ]);
+        setStats({
+          volume: volumeRes.data.data,
+          frequency: frequencyRes.data.data,
+          prs: prsRes.data.data,
+        });
+      } catch (err) {
+        setError('Failed to load stats.');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAllStats();
+  }, [user]);
+
+  if (loading) return <Spinner size="xl" />;
+  if (error) return <Alert status="error"><AlertIcon />{error}</Alert>;
+
+  return (
+    <Box>
+      <Heading as="h1" mb={8}>Your Performance Stats</Heading>
+      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
+        {/* Total Volume */}
+        <Box>
+          <Heading size="lg" mb={4}>Total Volume by Muscle Group</Heading>
+          <VStack spacing={4} align="stretch">
+            {stats.volume.map((item) => (
+              <Stat key={item.muscle_group} p={4} borderWidth="1px" borderRadius="md">
+                <StatLabel>{item.muscle_group.charAt(0).toUpperCase() + item.muscle_group.slice(1)}</StatLabel>
+                <StatNumber>{parseFloat(item.total_volume).toLocaleString()} kg</StatNumber>
+                <StatHelpText>Total weight lifted</StatHelpText>
+              </Stat>
+            ))}
+          </VStack>
+        </Box>
+
+        {/* Personal Records */}
+        <Box>
+          <Heading size="lg" mb={4}>Personal Records (Max Weight)</Heading>
+          <TableContainer borderWidth="1px" borderRadius="md">
+            <Table variant="simple">
+              <Thead>
+                <Tr>
+                  <Th>Exercise</Th>
+                  <Th isNumeric>Max Weight (kg)</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {stats.prs.map((pr) => (
+                  <Tr key={pr.exercise_id}>
+                    <Td>{pr.exercise_name}</Td>
+                    <Td isNumeric>{pr.max_weight}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        </Box>
+      </SimpleGrid>
+
+      {/* Session Frequency */}
+      <Box mt={10}>
+        <Heading size="lg" mb={4}>Session Frequency (Last 12 Weeks)</Heading>
+         <TableContainer borderWidth="1px" borderRadius="md">
+            <Table variant="simple">
+              <Thead>
+                <Tr>
+                  <Th>Week</Th>
+                  <Th isNumeric>Sessions</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {stats.frequency.map((week) => (
+                  <Tr key={`${week.year}-${week.week_number}`}>
+                    <Td>{`Week starting ${new Date(week.week_start_date).toLocaleDateString()}`}</Td>
+                    <Td isNumeric>{week.session_count}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+      </Box>
+    </Box>
+  );
+};
+
+export default StatsPage;
