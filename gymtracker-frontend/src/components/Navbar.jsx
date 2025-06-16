@@ -7,9 +7,6 @@ const Navbar = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  // Comprobar si el usuario tiene el rol de admin
-  const isAdmin = user?.roles?.some(role => role.name === 'admin');
-
   const handleLogout = () => {
     logout();
     navigate('/login');
@@ -49,13 +46,11 @@ const Navbar = () => {
         <Link as={RouterLink} to="/stats" p={2} mr={4}>
           My Stats
         </Link>
+        <Link as={RouterLink} to="/profile" p={2} mr={2}>
+            Profile
+        </Link>
 
-        {/* Enlace condicional para el panel de administrador */}
-        {isAdmin && (
-          <Link as={RouterLink} to="/admin/users" p={2} mr={4} fontWeight="bold" color="yellow.300">
-            Admin Panel
-          </Link>
-        )}
+        {/* El enlace al Panel de Admin ha sido eliminado */}
 
         <Button colorScheme="red" onClick={handleLogout}>
           Logout ({user?.name})
