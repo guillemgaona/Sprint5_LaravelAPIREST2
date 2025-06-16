@@ -23,16 +23,22 @@ import {
   NumberInputField,
   SimpleGrid,
 } from '@chakra-ui/react';
-import { FaTrash } from 'react-icons/fa';
+import { FaTrash, FaEdit } from 'react-icons/fa';
+import EditSetModal from '../components/EditSetModal';
 
 const SessionDetailPage = () => {
+  // --- HOOKS Y ESTADO ---
   const { sessionId } = useParams(); // Obtiene el ID de la sesión desde la URL
+  const toast = useToast();
+
+  // Estado para los datos de la página
   const [session, setSession] = useState(null);
   const [sets, setSets] = useState([]);
   const [exercises, setExercises] = useState([]);
+
+  // Estado para la UI (carga y errores)
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const toast = useToast();
 
   // Estado para el formulario de añadir una nueva serie
   const [newSetData, setNewSetData] = useState({
@@ -42,11 +48,14 @@ const SessionDetailPage = () => {
     weight: 20,
   });
 
-  // Función para cargar todos los datos necesarios para la página
+  // Estado para el modal de edición de series
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingSet, setEditingSet] = useState(null);
+
+  // --- OBTENCIÓN DE DATOS DE LA API ---
   const loadData = useCallback(async () => {
     try {
       setLoading(true);
-      // Hacemos las peticiones de sesión y ejercicios en paralelo para más eficiencia
       const [sessionRes, exercisesRes] = await Promise.all([
         fetchSessionById(sessionId),
         fetchExercises(),
@@ -56,32 +65,46 @@ const SessionDetailPage = () => {
       const exercisesData = exercisesRes.data.data;
 
       setSession(sessionData);
-      setSets(sessionData.sets || []); // Asumimos que la API devuelve los sets anidados
+      setSets(sessionData.sets || []);
       setExercises(exercisesData);
 
-      // Pre-seleccionar el primer ejercicio en el formulario
       if (exercisesData.length > 0) {
         setNewSetData((prev) => ({ ...prev, exercise_id: exercisesData[0].id }));
       }
     } catch (err) {
       setError('Failed to fetch session details.');
-      console.error(err);
     } finally {
       setLoading(false);
     }
   }, [sessionId]);
 
-  // useEffect para ejecutar la carga de datos cuando el componente se monta
   useEffect(() => {
     loadData();
   }, [loadData]);
 
-  // Manejador para los cambios en el formulario de nueva serie
+
+  // --- MANEJADORES DE EVENTOS (HANDLERS) ---
+
+  const handleOpenEditModal = (set) => {
+    setEditingSet(set);
+    setIsEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setEditingSet(null);
+  };
+
+  const handleSetUpdated = (updatedSet) => {
+    setSets(currentSets =>
+      currentSets.map(s => (s.id === updatedSet.id ? updatedSet : s))
+    );
+  };
+
   const handleNewSetChange = (e) => {
     setNewSetData({ ...newSetData, [e.target.name]: e.target.value });
   };
 
-  // Manejador para enviar el formulario y crear una nueva serie
   const handleAddSet = async (e) => {
     e.preventDefault();
     if (!newSetData.exercise_id) {
@@ -90,52 +113,35 @@ const SessionDetailPage = () => {
     }
     try {
       const response = await createSet(sessionId, newSetData);
-      // Añadir la nueva serie a la lista sin recargar la página
       setSets((currentSets) => [...currentSets, response.data.data]);
-      // Resetear el formulario y aumentar el número de serie para la siguiente
       setNewSetData((prev) => ({
         ...prev,
         set_number: Number(prev.set_number) + 1,
-        repetitions: 10,
-        weight: 20,
       }));
       toast({ title: 'Set added successfully!', status: 'success', duration: 2000, isClosable: true });
     } catch (err) {
-      toast({ title: 'Error adding set.', description: 'Please try again.', status: 'error', duration: 3000, isClosable: true });
+      toast({ title: 'Error adding set.', status: 'error', duration: 3000, isClosable: true });
     }
   };
 
-  // Manejador para borrar una serie
   const handleDeleteSet = async (setId) => {
     if (window.confirm('Are you sure you want to delete this set?')) {
       try {
         await deleteSet(setId);
-        // Quitar la serie de la lista sin recargar la página
         setSets((currentSets) => currentSets.filter((s) => s.id !== setId));
-        toast({
-          title: 'Set deleted.',
-          status: 'info',
-          duration: 3000,
-          isClosable: true,
-        });
+        toast({ title: 'Set deleted.', status: 'info', duration: 3000, isClosable: true });
       } catch (err) {
-        toast({
-          title: 'Error deleting set.',
-          description: 'Please try again.',
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        });
+        toast({ title: 'Error deleting set.', status: 'error', duration: 3000, isClosable: true });
       }
     }
   };
 
-  // Renderizado condicional mientras cargan los datos
+  // --- RENDERIZADO DEL COMPONENTE ---
+
   if (loading) return <Spinner size="xl" display="block" mx="auto" mt="20" />;
   if (error) return <Alert status="error"><AlertIcon />{error}</Alert>;
   if (!session) return <Text>Session not found.</Text>;
 
-  // Renderizado principal de la página
   return (
     <Box>
       <Flex justify="space-between" align="center" mb={6}>
@@ -153,9 +159,7 @@ const SessionDetailPage = () => {
           <FormControl isRequired>
             <FormLabel>Exercise</FormLabel>
             <Select name="exercise_id" value={newSetData.exercise_id} onChange={handleNewSetChange}>
-              {exercises.map((ex) => (
-                <option key={ex.id} value={ex.id}>{ex.name}</option>
-              ))}
+              {exercises.map((ex) => <option key={ex.id} value={ex.id}>{ex.name}</option>)}
             </Select>
           </FormControl>
           <FormControl isRequired>
@@ -184,19 +188,32 @@ const SessionDetailPage = () => {
       <Heading as="h2" size="lg" mt={8} mb={4}>Logged Sets</Heading>
       <VStack spacing={4} align="stretch">
         {sets.length > 0 ? (
-          sets.sort((a,b) => a.id - b.id).map((set) => ( // Ordenar por ID para ver los nuevos al final
+          sets.sort((a, b) => a.id - b.id).map((set) => (
             <Flex key={set.id} p={4} shadow="sm" borderWidth="1px" borderRadius="md" justify="space-between" align="center">
               <Box>
                 <Text fontWeight="bold">{set.exercise?.name || 'Exercise not found'}</Text>
                 <Text>Set {set.set_number}: {set.repetitions} reps at {set.weight} kg</Text>
               </Box>
-              <IconButton icon={<FaTrash />} aria-label="Delete set" size="sm" colorScheme="red" variant="ghost" onClick={() => handleDeleteSet(set.id)} />
+              <HStack>
+                <IconButton icon={<FaEdit />} aria-label="Edit set" size="sm" variant="ghost" onClick={() => handleOpenEditModal(set)} />
+                <IconButton icon={<FaTrash />} aria-label="Delete set" size="sm" colorScheme="red" variant="ghost" onClick={() => handleDeleteSet(set.id)} />
+              </HStack>
             </Flex>
           ))
         ) : (
           <Text>No sets have been logged for this session yet.</Text>
         )}
       </VStack>
+
+      {/* El Modal de Edición (solo visible cuando se necesita) */}
+      {editingSet && (
+        <EditSetModal
+          isOpen={isEditModalOpen}
+          onClose={handleCloseEditModal}
+          setToEdit={editingSet}
+          onSetUpdated={handleSetUpdated}
+        />
+      )}
     </Box>
   );
 };
