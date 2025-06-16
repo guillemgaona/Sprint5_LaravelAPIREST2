@@ -48,5 +48,5 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/users/{user}/stats/volume', [StatsController::class, 'volume'])->name('api.users.stats.volume');
     Route::get('/users/{user}/stats/frequency', [StatsController::class, 'frequency'])->name('api.users.stats.frequency');
-    Route::get('/users/{user}/stats/personal-bests', [StatsController::class, 'personalBests'])->name('api.users.stats.personal_bests');
+    Route::get('/users/{user}/personal-bests', [StatsController::class, 'personalBests'])->name('api.users.stats.personal_bests');
 });
