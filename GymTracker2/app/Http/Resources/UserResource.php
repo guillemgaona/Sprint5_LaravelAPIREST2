@@ -8,6 +8,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class UserResource extends JsonResource
 {
 
+    public static $wrap = null;
+    
     public function toArray(Request $request): array
     {
         return [
@@ -20,7 +22,7 @@ class UserResource extends JsonResource
             'updated_at' => $this->updated_at->toIso8601String(),
 
             'roles' => $this->whenLoaded('roles', function () {
-                 return $this->roles->pluck('name');
+                return $this->getRoleNames();
             }),
 
         ];

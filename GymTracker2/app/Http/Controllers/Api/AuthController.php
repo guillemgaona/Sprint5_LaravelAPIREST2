@@ -77,9 +77,12 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-
         $userRole = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'api']);
         $user->assignRole($userRole);
+
+        // --- CORRECCIÓN AQUÍ ---
+        // Cargar la relación de roles antes de devolver el recurso
+        $user->load('roles');
 
         return response()->json([
             'message' => 'User registered successfully!',
@@ -149,13 +152,15 @@ class AuthController extends Controller
             return response()->json(['error' => 'Unauthenticated'], 401);
         }
 
+        $user->load('roles');
+
         $tokenResult = $user->createToken('Personal Access Token');
 
         return response()->json([
             'message' => 'Login successful!',
             'access_token' => $tokenResult->accessToken,
             'token_type' => 'Bearer',
-            'user' => new UserResource($user)
+            'user' => new UserResource($user) // Ahora $user tiene sus roles cargados
         ], 200);
     }
 
@@ -218,6 +223,8 @@ class AuthController extends Controller
      */
     public function user(Request $request)
     {
-        return new UserResource($request->user());
+        $user = $request->user()->load('roles');
+
+        return new UserResource($user);
     }
 }
