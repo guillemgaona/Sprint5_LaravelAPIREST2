@@ -1,36 +1,84 @@
-// src/App.jsx
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
+
+// Importa todos tus componentes de página y layout
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import ExercisesPage from './pages/ExercisesPage';
 import SessionsPage from './pages/SessionsPage';
 import CreateSessionPage from './pages/CreateSessionPage';
-import SessionDetailPage from './pages/SessionDetailPage'; // <-- Importar
 import EditSessionPage from './pages/EditSessionPage';
-import StatsPage from './pages/StatsPage'; // <-- Importar
+import SessionDetailPage from './pages/SessionDetailPage';
+import StatsPage from './pages/StatsPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
+import AdminRoute from './components/AdminRoute';
+import CreateExercisePage from './pages/admin/CreateExercisePage';
+import EditExercisePage from './pages/admin/EditExercisePage';
 
+
+// Definimos la estructura de las rutas
 const router = createBrowserRouter([
-  { path: '/login', element: <LoginPage /> },
-  { path: '/register', element: <RegisterPage /> },
+  // --- Rutas Públicas ---
   {
-    path: '/',
+    path: '/login',
+    element: <LoginPage />,
+  },
+  {
+    path: '/register',
+    element: <RegisterPage />,
+  },
+
+  // --- Rutas Protegidas y con Layout ---
+  {
+    path: '/', // La ruta raíz
     element: (
       <ProtectedRoute>
-        <Layout />
+        <Layout /> 
       </ProtectedRoute>
     ),
+    // Todas las rutas aquí dentro son "hijas" del Layout
     children: [
-      { index: true, element: <Navigate to="/dashboard" replace /> },
-      { path: 'dashboard', element: <DashboardPage /> },
-      { path: 'exercises', element: <ExercisesPage /> },
-      { path: 'sessions', element: <SessionsPage /> },
-      { path: 'sessions/new', element: <CreateSessionPage /> },
-      { path: 'sessions/:sessionId', element: <SessionDetailPage /> },
-      { path: 'sessions/:sessionId/edit', element: <EditSessionPage /> }, // <-- Ruta nueva
-      { path: 'stats', element: <StatsPage /> }, // <-- Ruta nueva
+      { 
+        index: true, 
+        element: <Navigate to="/dashboard" replace /> 
+      },
+      {
+        path: 'dashboard',
+        element: <DashboardPage />,
+      },
+      {
+        path: 'exercises',
+        element: <ExercisesPage />,
+      },
+      {
+        path: 'sessions',
+        element: <SessionsPage />,
+      },
+      {
+        path: 'sessions/new',
+        element: <CreateSessionPage />,
+      },
+      {
+        path: 'sessions/:sessionId',
+        element: <SessionDetailPage />,
+      },
+      {
+        path: 'sessions/:sessionId/edit',
+        element: <EditSessionPage />,
+      },
+      {
+        path: 'stats',
+        element: <StatsPage />,
+      },
+            {
+        path: 'admin',
+        element: <AdminRoute />,
+        children: [
+          { path: 'exercises/new', element: <CreateExercisePage /> },
+          { path: 'exercises/:exerciseId/edit', element: <EditExercisePage /> },
+        ]
+      }
     ],
   },
 ]);
