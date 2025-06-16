@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { getAuthenticatedUser, loginUser } from '../api/authService'; // Asumiendo que has separado el login
+import { getAuthenticatedUser, loginUser } from '../api/authService';
 import axiosInstance from '../api/axiosInstance';
 
 export const AuthContext = createContext();
@@ -16,13 +16,10 @@ export const AuthProvider = ({ children }) => {
       
       getAuthenticatedUser()
         .then((response) => {
-          // --- INICIO DE LA CORRECCIÓN CLAVE ---
-          // La API envuelve al usuario en una clave "data". Accedemos a ella.
-          setUser(response.data.data);
-          // --- FIN DE LA CORRECCIÓN CLAVE ---
+          // AHORA LA RESPUESTA ES DIRECTAMENTE EL OBJETO DE USUARIO
+          setUser(response.data);
         })
         .catch(() => {
-          // El token es inválido o ha expirado
           localStorage.removeItem('authToken');
           setUser(null);
         })
@@ -32,29 +29,28 @@ export const AuthProvider = ({ children }) => {
     } else {
       setLoading(false);
     }
-  }, [token]); // Dependemos del token para re-evaluar
+  }, []); // Se ejecuta solo una vez al cargar la app
 
   const login = async (email, password) => {
     const response = await loginUser({ email, password });
-    const { access_token, user: userData } = response.data; // Asumiendo que login devuelve el usuario también
+    const { access_token, user: userData } = response.data; // userData es ahora el objeto de usuario
     localStorage.setItem('authToken', access_token);
     axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
     setToken(access_token);
-    // Asegurarse de que aquí también se guarda el objeto de usuario correcto
-    setUser(userData.data || userData); 
+    setUser(userData); // <-- Se guarda directamente el objeto de usuario
   };
 
   const logout = () => {
-    // Idealmente, llamar a /api/logout para invalidar el token en el servidor
-    // axiosInstance.post('/api/logout'); 
     localStorage.removeItem('authToken');
     delete axiosInstance.defaults.headers.common['Authorization'];
     setToken(null);
     setUser(null);
   };
 
+  const contextValue = { user, token, login, logout, loading, isAuthenticated: !!user };
+
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, loading, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={contextValue}>
       {!loading && children}
     </AuthContext.Provider>
   );
