@@ -7,6 +7,7 @@ import ExercisesPage from './pages/ExercisesPage';
 import SessionsPage from './pages/SessionsPage';
 import CreateSessionPage from './pages/CreateSessionPage';
 import SessionDetailPage from './pages/SessionDetailPage'; // <-- Importar
+import EditSessionPage from './pages/EditSessionPage';
 import StatsPage from './pages/StatsPage'; // <-- Importar
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
@@ -27,7 +28,8 @@ const router = createBrowserRouter([
       { path: 'exercises', element: <ExercisesPage /> },
       { path: 'sessions', element: <SessionsPage /> },
       { path: 'sessions/new', element: <CreateSessionPage /> },
-      { path: 'sessions/:sessionId', element: <SessionDetailPage /> }, // <-- Ruta nueva
+      { path: 'sessions/:sessionId', element: <SessionDetailPage /> },
+      { path: 'sessions/:sessionId/edit', element: <EditSessionPage /> }, // <-- Ruta nueva
       { path: 'stats', element: <StatsPage /> }, // <-- Ruta nueva
     ],
   },
