@@ -24,16 +24,16 @@ A frontend client developed in React to consume the GymTracker API. It allows us
 - React Icons: For a rich set of icons used throughout the application.
 
 ## 📦 Installation
-# Clone the repository
+**Clone the repository**
 git clone https://github.com/guillemgaona/Sprint5_LaravelAPIREST2.git
 
-# Navigate to the project directory
+**Navigate to the project directory**
 cd gymtracker-frontend
 
-# Install dependencies
+**Install dependencies**
 npm install
 
-# Start the development server (usually on http://localhost:5173)
+**Start the development server (usually on http://localhost:5173)**
 npm run dev
 ```
 
