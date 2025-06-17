@@ -13,7 +13,7 @@ const Navbar = () => {
   return (
     <Flex as="nav" align="center" justifyContent="space-between" padding="1.5rem" bg="gray.800" color="white" boxShadow="md">
       <Heading as="h1" size="lg" letterSpacing={'-.1rem'}>
-        <Link as={RouterLink} to="/dashboard" _hover={{ textDecoration: 'none' }}>GymTracker</Link>
+        <Link as={RouterLink} to="/app/dashboard" _hover={{ textDecoration: 'none' }}>GymTracker</Link>
       </Heading>
 
       <Spacer />
