@@ -39,18 +39,18 @@ const SessionsPage = () => {
     <Box>
       <Flex justify="space-between" align="center" mb={6}>
         <Heading as="h1">My Training Sessions</Heading>
-        <Button as={RouterLink} to="/sessions/new" colorScheme="blue">Log New Session</Button>
+        <Button as={RouterLink} to="/app/sessions/new" colorScheme="blue">Log New Session</Button>
       </Flex>
       <VStack spacing={4} align="stretch">
         {sessions.length > 0 ? sessions.map((session) => (
           <Box key={session.id} p={5} shadow="md" borderWidth="1px" borderRadius="md">
             <Flex justify="space-between" align="center">
-              <Box as={RouterLink} to={`/sessions/${session.id}`} _hover={{ textDecoration: 'none' }}>
+              <Box as={RouterLink} to={`/app/sessions/${session.id}`} _hover={{ textDecoration: 'none' }}>
                 <Heading fontSize="xl">{`Session on ${session.date}`}</Heading>
                 <Text mt={2} color="gray.600">{session.notes || 'No notes.'}</Text>
               </Box>
               <HStack spacing={2}>
-                <IconButton as={RouterLink} to={`/sessions/${session.id}/edit`} icon={<FaEdit />} aria-label="Edit session" />
+                <IconButton as={RouterLink} to={`/app/sessions/${session.id}/edit`} icon={<FaEdit />} aria-label="Edit session" />
                 <IconButton icon={<FaTrash />} colorScheme="red" aria-label="Delete session" onClick={() => handleDeleteSession(session.id)} />
               </HStack>
             </Flex>

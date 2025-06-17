@@ -59,7 +59,7 @@ const Sidebar = ({ isOpen, onClose, onMouseLeave }) => {
   const handleLogout = () => {
     logout();
     onClose();
-    navigate('/login');
+    navigate('/');
   };
 
   return (
@@ -80,10 +80,10 @@ const Sidebar = ({ isOpen, onClose, onMouseLeave }) => {
           <DrawerBody>
             <VStack align="stretch" spacing={2}>
               {/* Estos enlaces ahora se verán bien en ambos modos */}
-              <NavItem icon={MdDashboard} to="/dashboard" onClick={onClose}>Dashboard</NavItem>
-              <NavItem icon={MdFitnessCenter} to="/exercises" onClick={onClose}>Exercises</NavItem>
-              <NavItem icon={MdTimeline} to="/sessions" onClick={onClose}>My Sessions</NavItem>
-              <NavItem icon={MdQueryStats} to="/stats" onClick={onClose}>My Stats</NavItem>
+              <NavItem icon={MdDashboard} to="/app/dashboard" onClick={onClose}>Dashboard</NavItem>
+              <NavItem icon={MdFitnessCenter} to="/app/exercises" onClick={onClose}>Exercises</NavItem>
+              <NavItem icon={MdTimeline} to="/app/sessions" onClick={onClose}>My Sessions</NavItem>
+              <NavItem icon={MdQueryStats} to="/app/stats" onClick={onClose}>My Stats</NavItem>
             </VStack>
           </DrawerBody>
 

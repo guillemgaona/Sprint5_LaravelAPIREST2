@@ -63,7 +63,7 @@ const ExercisesPage = () => {
       <Flex justify="space-between" align="center" mb={6}>
         <Heading as="h1">Exercise List</Heading>
         {isAdmin && (
-          <Button as={RouterLink} to="/admin/exercises/new" colorScheme="green" leftIcon={<FaPlus />}>
+          <Button as={RouterLink} to="/app/admin/exercises/new" colorScheme="green" leftIcon={<FaPlus />}>
             Create Exercise
           </Button>
         )}
@@ -81,14 +81,14 @@ const ExercisesPage = () => {
           exercises.map((exercise) => (
             <Link
               as={RouterLink}
-              to={`/exercises/${exercise.id}`}
+              to={`/app/exercises/${exercise.id}`}
               key={exercise.id}
               _hover={{ textDecoration: 'none' }}
             >
               <Card h="100%" position="relative" overflow="hidden" _hover={{ transform: 'scale(1.03)', shadow: 'xl' }} transition="transform 0.2s, box-shadow 0.2s">
                 {isAdmin && (
                   <HStack position="absolute" top={2} right={2} onClick={(e) => e.preventDefault()}>
-                    <IconButton as={RouterLink} to={`/admin/exercises/${exercise.id}/edit`} icon={<FaEdit />} size="sm" aria-label="Edit Exercise" />
+                    <IconButton as={RouterLink} to={`/app/admin/exercises/${exercise.id}/edit`} icon={<FaEdit />} size="sm" aria-label="Edit Exercise" />
                     <IconButton icon={<FaTrash />} size="sm" colorScheme="red" aria-label="Delete Exercise" onClick={() => handleDelete(exercise.id)} />
                   </HStack>
                 )}

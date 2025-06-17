@@ -19,9 +19,9 @@ const Navbar = () => {
       <Spacer />
 
       <HStack spacing={4}>
-        <Link as={RouterLink} to="/exercises" fontSize="lg" _hover={{ color: 'blue.300' }}>Exercises</Link>
-        <Link as={RouterLink} to="/sessions" fontSize="lg" _hover={{ color: 'blue.300' }}>My Sessions</Link>
-        <Link as={RouterLink} to="/stats" fontSize="lg" _hover={{ color: 'blue.300' }}>My Stats</Link>
+        <Link as={RouterLink} to="/app/exercises" fontSize="lg" _hover={{ color: 'blue.300' }}>Exercises</Link>
+        <Link as={RouterLink} to="/app/sessions" fontSize="lg" _hover={{ color: 'blue.300' }}>My Sessions</Link>
+        <Link as={RouterLink} to="/app/stats" fontSize="lg" _hover={{ color: 'blue.300' }}>My Stats</Link>
       </HStack>
 
       <Spacer />

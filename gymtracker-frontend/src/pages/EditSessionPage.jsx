@@ -27,7 +27,7 @@ const EditSessionPage = () => {
     e.preventDefault();
     try {
       await updateSession(sessionId, formData);
-      navigate(`/sessions`); // Volver a la lista de sesiones
+      navigate(`/app/sessions`); // Volver a la lista de sesiones
     } catch (err) {
       setError('Failed to update session.');
     }

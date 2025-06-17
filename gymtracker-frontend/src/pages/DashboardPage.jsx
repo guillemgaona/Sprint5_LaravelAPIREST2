@@ -38,7 +38,7 @@ const DashboardPage = () => {
             <Text mb={4}>
               View, create, and manage your workout sessions and logged sets.
             </Text>
-            <Button as={RouterLink} to="/sessions" colorScheme="blue">
+            <Button as={RouterLink} to="/app/sessions" colorScheme="blue">
               Go to My Sessions
             </Button>
           </CardBody>
@@ -53,7 +53,7 @@ const DashboardPage = () => {
             <Text mb={4}>
               Track your progress, view personal records, and analyze your training volume.
             </Text>
-            <Button as={RouterLink} to="/stats" colorScheme="green">
+            <Button as={RouterLink} to="/app/stats" colorScheme="green">
               View My Stats
             </Button>
           </CardBody>
@@ -68,7 +68,7 @@ const DashboardPage = () => {
             <Text mb={4}>
               Explore the full list of available exercises to build your next workout.
             </Text>
-            <Button as={RouterLink} to="/exercises" colorScheme="purple">
+            <Button as={RouterLink} to="/app/exercises" colorScheme="purple">
               Browse Exercises
             </Button>
           </CardBody>

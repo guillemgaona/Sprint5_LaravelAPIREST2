@@ -18,7 +18,7 @@ const LoginPage = () => {
     setError('');
     try {
       await auth.login(email, password);
-      navigate('/dashboard'); // Redirigir al dashboard después del login
+      navigate('/app/dashboard');
     } catch (err) {
       setError('Failed to login. Please check your credentials.');
       console.error(err);

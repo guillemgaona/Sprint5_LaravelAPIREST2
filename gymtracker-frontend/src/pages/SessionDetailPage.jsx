@@ -149,7 +149,7 @@ const SessionDetailPage = () => {
           <Heading as="h1" mb={2}>{`Session on ${session.date}`}</Heading>
           <Text fontSize="lg" color="gray.600">{session.notes || 'No notes for this session.'}</Text>
         </Box>
-        <Button as={RouterLink} to={`/sessions/${sessionId}/edit`}>Edit Session Details</Button>
+        <Button as={RouterLink} to={`/app/sessions/${sessionId}/edit`}>Edit Session Details</Button>
       </Flex>
       
       {/* Formulario para Añadir Nueva Serie */}
