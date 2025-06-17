@@ -13,14 +13,22 @@ import {
   Icon,
   Box,
   Flex,
+  Spacer,
+  useColorModeValue, // <-- 1. Importa el hook useColorModeValue
 } from '@chakra-ui/react';
 import { useAuth } from '../hooks/useAuth';
 import { MdDashboard, MdFitnessCenter, MdTimeline, MdQueryStats, MdExitToApp } from 'react-icons/md';
+import ThemeToggleButton from './ThemeToggleButton';
 
-// Componente NavItem (sin cambios)
+// Componente NavItem (con la corrección)
 const NavItem = ({ icon, children, to, onClick }) => {
   const location = useLocation();
   const isActive = location.pathname === to;
+
+  // --- INICIO DE LA CORRECCIÓN ---
+  // Define un color para el modo claro y otro para el modo oscuro
+  const inactiveColor = useColorModeValue('gray.700', 'whiteAlpha.900');
+  // --- FIN DE LA CORRECCIÓN ---
 
   return (
     <Link
@@ -31,7 +39,9 @@ const NavItem = ({ icon, children, to, onClick }) => {
       borderRadius="md"
       w="100%"
       bg={isActive ? 'blue.500' : 'transparent'}
-      color={isActive ? 'white' : 'gray.700'}
+      // El color del enlace activo siempre será blanco.
+      // El color del inactivo ahora depende del modo de color.
+      color={isActive ? 'white' : inactiveColor}
       _hover={{ textDecoration: 'none', bg: 'blue.400', color: 'white' }}
       display="flex"
       alignItems="center"
@@ -57,18 +67,23 @@ const Sidebar = ({ isOpen, onClose, onMouseLeave }) => {
       <DrawerOverlay />
       <DrawerContent onMouseLeave={onMouseLeave}>
         <DrawerCloseButton />
-        <DrawerHeader borderBottomWidth="1px">GymTracker Menu</DrawerHeader>
         
-        <Flex direction="column" justify="space-between" h="100%">
+        <DrawerHeader borderBottomWidth="1px">
+          <Flex align="center">
+            <Box>GymTracker Menu</Box>
+            <Spacer />
+            <ThemeToggleButton />
+          </Flex>
+        </DrawerHeader>
+
+        <Flex direction="column" justify="space-between" flex="1">
           <DrawerBody>
             <VStack align="stretch" spacing={2}>
-              {/* --- INICIO DE LA CORRECCIÓN --- */}
-              {/* He vuelto a añadir todos los enlaces de navegación */}
+              {/* Estos enlaces ahora se verán bien en ambos modos */}
               <NavItem icon={MdDashboard} to="/dashboard" onClick={onClose}>Dashboard</NavItem>
               <NavItem icon={MdFitnessCenter} to="/exercises" onClick={onClose}>Exercises</NavItem>
               <NavItem icon={MdTimeline} to="/sessions" onClick={onClose}>My Sessions</NavItem>
               <NavItem icon={MdQueryStats} to="/stats" onClick={onClose}>My Stats</NavItem>
-              {/* --- FIN DE LA CORRECCIÓN --- */}
             </VStack>
           </DrawerBody>
 
@@ -78,7 +93,6 @@ const Sidebar = ({ isOpen, onClose, onMouseLeave }) => {
             </Button>
           </Box>
         </Flex>
-
       </DrawerContent>
     </Drawer>
   );
