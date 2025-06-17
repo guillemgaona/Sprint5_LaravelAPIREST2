@@ -11,15 +11,13 @@ import {
   Link,
   Button,
   Icon,
-  Flex,
-  Text,
   Box,
+  Flex,
 } from '@chakra-ui/react';
 import { useAuth } from '../hooks/useAuth';
-// Se han quitado FaUserCog y FaUserShield de la siguiente línea
 import { MdDashboard, MdFitnessCenter, MdTimeline, MdQueryStats, MdExitToApp } from 'react-icons/md';
 
-// El componente NavItem no necesita cambios
+// Componente NavItem (sin cambios)
 const NavItem = ({ icon, children, to, onClick }) => {
   const location = useLocation();
   const isActive = location.pathname === to;
@@ -44,11 +42,9 @@ const NavItem = ({ icon, children, to, onClick }) => {
   );
 };
 
-const Sidebar = ({ isOpen, onClose }) => {
-  const { user, logout } = useAuth();
+const Sidebar = ({ isOpen, onClose, onMouseLeave }) => {
+  const { logout } = useAuth();
   const navigate = useNavigate();
-  // La variable 'isAdmin' ya no es necesaria aquí, pero no molesta si se queda.
-  // const isAdmin = user?.roles?.includes('admin'); 
 
   const handleLogout = () => {
     logout();
@@ -59,27 +55,30 @@ const Sidebar = ({ isOpen, onClose }) => {
   return (
     <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
       <DrawerOverlay />
-      <DrawerContent>
+      <DrawerContent onMouseLeave={onMouseLeave}>
         <DrawerCloseButton />
         <DrawerHeader borderBottomWidth="1px">GymTracker Menu</DrawerHeader>
-        <DrawerBody>
-          <VStack align="stretch" spacing={2}>
-            <NavItem icon={MdDashboard} to="/dashboard" onClick={onClose}>Dashboard</NavItem>
-            <NavItem icon={MdFitnessCenter} to="/exercises" onClick={onClose}>Exercises</NavItem>
-            <NavItem icon={MdTimeline} to="/sessions" onClick={onClose}>My Sessions</NavItem>
-            <NavItem icon={MdQueryStats} to="/stats" onClick={onClose}>My Stats</NavItem>
-            
-            {/* --- LÍNEAS ELIMINADAS --- */}
-            {/* Se ha quitado el NavItem de Profile */}
-            {/* Se ha quitado el NavItem de Admin */}
+        
+        <Flex direction="column" justify="space-between" h="100%">
+          <DrawerBody>
+            <VStack align="stretch" spacing={2}>
+              {/* --- INICIO DE LA CORRECCIÓN --- */}
+              {/* He vuelto a añadir todos los enlaces de navegación */}
+              <NavItem icon={MdDashboard} to="/dashboard" onClick={onClose}>Dashboard</NavItem>
+              <NavItem icon={MdFitnessCenter} to="/exercises" onClick={onClose}>Exercises</NavItem>
+              <NavItem icon={MdTimeline} to="/sessions" onClick={onClose}>My Sessions</NavItem>
+              <NavItem icon={MdQueryStats} to="/stats" onClick={onClose}>My Stats</NavItem>
+              {/* --- FIN DE LA CORRECCIÓN --- */}
+            </VStack>
+          </DrawerBody>
 
-          </VStack>
-        </DrawerBody>
-        <Box p={4} borderTopWidth="1px">
-          <Button w="100%" colorScheme="red" leftIcon={<MdExitToApp />} onClick={handleLogout}>
-            Logout
-          </Button>
-        </Box>
+          <Box p={4} borderTopWidth="1px">
+            <Button w="100%" colorScheme="red" leftIcon={<MdExitToApp />} onClick={handleLogout}>
+              Logout
+            </Button>
+          </Box>
+        </Flex>
+
       </DrawerContent>
     </Drawer>
   );
