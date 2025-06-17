@@ -13,22 +13,18 @@ import {
   Icon,
   Box,
   Flex,
-  Spacer,
-  useColorModeValue, // <-- 1. Importa el hook useColorModeValue
+  Spacer, // Spacer ya no es necesario aquí, pero puede quedarse
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { useAuth } from '../hooks/useAuth';
 import { MdDashboard, MdFitnessCenter, MdTimeline, MdQueryStats, MdExitToApp } from 'react-icons/md';
 import ThemeToggleButton from './ThemeToggleButton';
 
-// Componente NavItem (con la corrección)
+// El componente NavItem no necesita cambios
 const NavItem = ({ icon, children, to, onClick }) => {
   const location = useLocation();
   const isActive = location.pathname === to;
-
-  // --- INICIO DE LA CORRECCIÓN ---
-  // Define un color para el modo claro y otro para el modo oscuro
   const inactiveColor = useColorModeValue('gray.700', 'whiteAlpha.900');
-  // --- FIN DE LA CORRECCIÓN ---
 
   return (
     <Link
@@ -39,8 +35,6 @@ const NavItem = ({ icon, children, to, onClick }) => {
       borderRadius="md"
       w="100%"
       bg={isActive ? 'blue.500' : 'transparent'}
-      // El color del enlace activo siempre será blanco.
-      // El color del inactivo ahora depende del modo de color.
       color={isActive ? 'white' : inactiveColor}
       _hover={{ textDecoration: 'none', bg: 'blue.400', color: 'white' }}
       display="flex"
@@ -68,18 +62,14 @@ const Sidebar = ({ isOpen, onClose, onMouseLeave }) => {
       <DrawerContent onMouseLeave={onMouseLeave}>
         <DrawerCloseButton />
         
+        {/* Cabecera simplificada sin el botón */}
         <DrawerHeader borderBottomWidth="1px">
-          <Flex align="center">
-            <Box>GymTracker Menu</Box>
-            <Spacer />
-            <ThemeToggleButton />
-          </Flex>
+          GymTracker Menu
         </DrawerHeader>
 
         <Flex direction="column" justify="space-between" flex="1">
           <DrawerBody>
-            <VStack align="stretch" spacing={2}>
-              {/* Estos enlaces ahora se verán bien en ambos modos */}
+            <VStack align="stretch" spacing={2} mt={2}>
               <NavItem icon={MdDashboard} to="/app/dashboard" onClick={onClose}>Dashboard</NavItem>
               <NavItem icon={MdFitnessCenter} to="/app/exercises" onClick={onClose}>Exercises</NavItem>
               <NavItem icon={MdTimeline} to="/app/sessions" onClick={onClose}>My Sessions</NavItem>
@@ -87,11 +77,17 @@ const Sidebar = ({ isOpen, onClose, onMouseLeave }) => {
             </VStack>
           </DrawerBody>
 
+          {/* --- INICIO DE LA CORRECCIÓN --- */}
+          {/* Área inferior que ahora contiene ambos botones */}
           <Box p={4} borderTopWidth="1px">
-            <Button w="100%" colorScheme="red" leftIcon={<MdExitToApp />} onClick={handleLogout}>
-              Logout
-            </Button>
+            <Flex justify="space-between" align="center">
+              <Button colorScheme="red" leftIcon={<MdExitToApp />} onClick={handleLogout}>
+                Logout
+              </Button>
+              <ThemeToggleButton />
+            </Flex>
           </Box>
+          {/* --- FIN DE LA CORRECCIÓN --- */}
         </Flex>
       </DrawerContent>
     </Drawer>
