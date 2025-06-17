@@ -5,19 +5,20 @@ import {
   Flex,
   Heading,
   Spacer,
-  Text, // <-- Importación añadida
-  Link, // <-- Importación añadida
+  Link,
+  HStack,
+  Text, // <-- Necesitamos Text para el mensaje de bienvenida
 } from '@chakra-ui/react';
 import { useAuth } from '../hooks/useAuth';
 
 const Navbar = () => {
-  const { user } = useAuth();
+  const { user } = useAuth(); // Ya no necesitamos 'logout' ni 'navigate' aquí
 
   return (
     <Flex
       as="nav"
       align="center"
-      justifyContent="space-between" // Justifica el contenido
+      justifyContent="space-between"
       padding="1.5rem"
       bg="gray.800"
       color="white"
@@ -29,12 +30,29 @@ const Navbar = () => {
           GymTracker
         </Link>
       </Heading>
-      
+
       <Spacer />
 
+      {/* Enlaces de navegación en el centro */}
+      <HStack spacing={4}>
+        <Link as={RouterLink} to="/exercises" fontSize="lg" _hover={{ color: 'blue.300' }}>
+          Exercises
+        </Link>
+        <Link as={RouterLink} to="/sessions" fontSize="lg" _hover={{ color: 'blue.300' }}>
+          My Sessions
+        </Link>
+        <Link as={RouterLink} to="/stats" fontSize="lg" _hover={{ color: 'blue.300' }}>
+          My Stats
+        </Link>
+      </HStack>
+
+      <Spacer />
+      
       {/* Mensaje de bienvenida a la derecha */}
       <Box>
-        <Text fontSize="lg">Welcome, {user?.name || 'User'}!</Text>
+        <Text fontSize="lg" fontWeight="medium">
+          Welcome, {user?.name || 'User'}!
+        </Text>
       </Box>
     </Flex>
   );
