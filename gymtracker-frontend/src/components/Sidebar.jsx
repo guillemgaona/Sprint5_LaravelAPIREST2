@@ -13,13 +13,13 @@ import {
   Icon,
   Flex,
   Text,
-  Box, // <-- ESTA ES LA IMPORTACIÓN QUE FALTABA
+  Box,
 } from '@chakra-ui/react';
 import { useAuth } from '../hooks/useAuth';
+// Se han quitado FaUserCog y FaUserShield de la siguiente línea
 import { MdDashboard, MdFitnessCenter, MdTimeline, MdQueryStats, MdExitToApp } from 'react-icons/md';
-import { FaUserCog, FaUserShield } from 'react-icons/fa';
 
-// Componente reutilizable para cada enlace del menú
+// El componente NavItem no necesita cambios
 const NavItem = ({ icon, children, to, onClick }) => {
   const location = useLocation();
   const isActive = location.pathname === to;
@@ -47,11 +47,12 @@ const NavItem = ({ icon, children, to, onClick }) => {
 const Sidebar = ({ isOpen, onClose }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const isAdmin = user?.roles?.includes('admin');
+  // La variable 'isAdmin' ya no es necesaria aquí, pero no molesta si se queda.
+  // const isAdmin = user?.roles?.includes('admin'); 
 
   const handleLogout = () => {
     logout();
-    onClose(); // Cierra el sidebar antes de navegar
+    onClose();
     navigate('/login');
   };
 
@@ -67,14 +68,13 @@ const Sidebar = ({ isOpen, onClose }) => {
             <NavItem icon={MdFitnessCenter} to="/exercises" onClick={onClose}>Exercises</NavItem>
             <NavItem icon={MdTimeline} to="/sessions" onClick={onClose}>My Sessions</NavItem>
             <NavItem icon={MdQueryStats} to="/stats" onClick={onClose}>My Stats</NavItem>
-            <NavItem icon={FaUserCog} to="/profile" onClick={onClose}>Profile</NavItem>
-            {isAdmin && (
-              <NavItem icon={FaUserShield} to="/admin/users" onClick={onClose}>Admin</NavItem>
-            )}
+            
+            {/* --- LÍNEAS ELIMINADAS --- */}
+            {/* Se ha quitado el NavItem de Profile */}
+            {/* Se ha quitado el NavItem de Admin */}
+
           </VStack>
         </DrawerBody>
-
-        {/* Este Box es el que causaba el error porque no estaba importado */}
         <Box p={4} borderTopWidth="1px">
           <Button w="100%" colorScheme="red" leftIcon={<MdExitToApp />} onClick={handleLogout}>
             Logout
