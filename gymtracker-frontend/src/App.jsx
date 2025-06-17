@@ -15,6 +15,7 @@ import Layout from './components/Layout';
 import AdminRoute from './components/AdminRoute';
 import CreateExercisePage from './pages/admin/CreateExercisePage';
 import EditExercisePage from './pages/admin/EditExercisePage';
+import ExerciseDetailPage from './pages/ExerciseDetailPage'; 
 
 
 // Definimos la estructura de las rutas
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
       {
         path: 'exercises',
         element: <ExercisesPage />,
+      },
+      {
+        path: 'exercises/:exerciseId',
+        element: <ExerciseDetailPage />,
       },
       {
         path: 'sessions',

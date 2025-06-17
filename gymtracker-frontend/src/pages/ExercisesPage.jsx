@@ -19,6 +19,7 @@ import {
   IconButton,
   useToast,
   HStack,
+  Link,
 } from '@chakra-ui/react';
 import { FaEdit, FaTrash, FaPlus, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
@@ -26,6 +27,8 @@ const ExercisesPage = () => {
   const [exercises, setExercises] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  
+  // Estado para la paginación
   const [currentPage, setCurrentPage] = useState(1);
   const [paginationMeta, setPaginationMeta] = useState(null);
 
@@ -33,6 +36,7 @@ const ExercisesPage = () => {
   const toast = useToast();
   const isAdmin = user?.roles?.includes('admin');
 
+  // Carga los ejercicios para una página específica
   const loadExercises = (page) => {
     setLoading(true);
     fetchExercises(page)
@@ -44,6 +48,7 @@ const ExercisesPage = () => {
       .finally(() => setLoading(false));
   };
 
+  // Vuelve a cargar los datos cuando 'currentPage' cambia
   useEffect(() => {
     loadExercises(currentPage);
   }, [currentPage]);
@@ -53,11 +58,11 @@ const ExercisesPage = () => {
       try {
         await deleteExercise(exerciseId);
         toast({ title: 'Exercise deleted.', status: 'success', duration: 2000, isClosable: true });
-        // Si estamos en la última página y borramos el último item, volvemos a la página anterior
+        // Si borramos el último ítem de una página, volvemos a la página anterior
         if (exercises.length === 1 && currentPage > 1) {
           setCurrentPage(currentPage - 1);
         } else {
-          loadExercises(currentPage);
+          loadExercises(currentPage); // Recargamos la página actual
         }
       } catch (err) {
         toast({ title: 'Error deleting exercise.', status: 'error', duration: 3000, isClosable: true });
@@ -65,7 +70,7 @@ const ExercisesPage = () => {
     }
   };
 
-  if (loading) return <Spinner size="xl" />;
+  if (loading) return <Spinner size="xl" display="block" mx="auto" mt="20" />;
   if (error) return <Alert status="error"><AlertIcon />{error}</Alert>;
 
   return (
@@ -79,26 +84,32 @@ const ExercisesPage = () => {
         )}
       </Flex>
       
-      {/* --- INICIO DE LA CORRECCIÓN --- */}
-      {/* Esta es la parte que faltaba: el renderizado de la lista */}
       <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
         {exercises.map((exercise) => (
-          <Card key={exercise.id} position="relative" overflow="hidden">
-            {isAdmin && (
-              <HStack position="absolute" top={2} right={2}>
-                <IconButton as={RouterLink} to={`/admin/exercises/${exercise.id}/edit`} icon={<FaEdit />} size="sm" aria-label="Edit Exercise" />
-                <IconButton icon={<FaTrash />} size="sm" colorScheme="red" aria-label="Delete Exercise" onClick={() => handleDelete(exercise.id)} />
-              </HStack>
-            )}
-            <CardHeader><Heading size="md">{exercise.name}</Heading></CardHeader>
-            <CardBody>
-              <Text><strong>Muscle Group:</strong> {exercise.muscle_group}</Text>
-              <Text mt={2}>{exercise.description}</Text>
-            </CardBody>
-          </Card>
+          // Cada tarjeta es ahora un enlace a la página de detalle
+          <Link
+            as={RouterLink}
+            to={`/exercises/${exercise.id}`}
+            key={exercise.id}
+            _hover={{ textDecoration: 'none' }} // Quita el subrayado al pasar el ratón
+          >
+            <Card h="100%" position="relative" overflow="hidden" _hover={{ transform: 'scale(1.03)', shadow: 'xl' }} transition="transform 0.2s, box-shadow 0.2s">
+              {isAdmin && (
+                // Prevenimos la navegación al hacer clic en los botones de acción
+                <HStack position="absolute" top={2} right={2} onClick={(e) => e.preventDefault()}>
+                  <IconButton as={RouterLink} to={`/admin/exercises/${exercise.id}/edit`} icon={<FaEdit />} size="sm" aria-label="Edit Exercise" />
+                  <IconButton icon={<FaTrash />} size="sm" colorScheme="red" aria-label="Delete Exercise" onClick={() => handleDelete(exercise.id)} />
+                </HStack>
+              )}
+              <CardHeader><Heading size="md">{exercise.name}</Heading></CardHeader>
+              <CardBody>
+                <Text><strong>Muscle Group:</strong> {exercise.muscle_group}</Text>
+                <Text mt={2}>{exercise.description || 'No description available.'}</Text>
+              </CardBody>
+            </Card>
+          </Link>
         ))}
       </SimpleGrid>
-      {/* --- FIN DE LA CORRECCIÓN --- */}
 
       {/* Controles de Paginación */}
       <Flex justify="center" align="center" mt={8}>
