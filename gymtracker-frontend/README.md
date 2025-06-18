@@ -24,21 +24,29 @@ A frontend client developed in React to consume the GymTracker API. It allows us
 - React Icons: For a rich set of icons used throughout the application.
 
 ## 📦 Installation
+
 **Clone the repository**
+```bash
 git clone https://github.com/guillemgaona/Sprint5_LaravelAPIREST2.git
+```
 
 **Navigate to the project directory**
+```bash
 cd gymtracker-frontend
+```
 
 **Install dependencies**
+```bash
 npm install
+```
 
 **Start the development server (usually on http://localhost:5173)**
+```bash
 npm run dev
 ```
 
 ## 🏗️ Project Structure
-```
+```bash
 src/
 ├── api/          # Services for API calls (axiosInstance, authService, etc.)
 ├── components/   # Reusable components (Layout, Navbar, Sidebar, etc.)
@@ -52,10 +60,12 @@ src/
 ## 🔧 Configuration
 The project requires an environment file to connect with the backend API.
 
-- Create a file named .env in the root of the gymtracker-frontend directory.
+- Create a file named `.env` in the root of the `gymtracker-frontend` directory.
 - Add the following variable, pointing to the URL of your running Laravel API server:
 
+```env
 VITE_API_BASE_URL=http://127.0.0.1:8000
+```
 
 This ensures that all API requests made with Axios are directed to the correct backend server.
 
@@ -85,36 +95,33 @@ https://blog.google/technology/google-deepmind/gemini-model-thinking-updates-mar
 > ¿Cómo puedo crear un nuevo proyecto React desde cero para empezar a desarrollar el frontend de mi aplicación de Gym Tracker?
 
 ##### 🤖 Respuesta de Gemini:
- Configuración Inicial del Proyecto (Setup)
-Paso 1.1: Requisitos
-Node.js (versión 18 o superior) y npm. Puedes descargarlo desde nodejs.org.
-Paso 1.2: Crear el Proyecto con Vite
-Abre tu terminal (fuera de la carpeta de tu proyecto de Laravel) y ejecuta:
+**Configuración Inicial del Proyecto (Setup)**
 
-Bash
+**Paso 1.1: Requisitos**  
+Node.js (versión 18 o superior) y npm. Puedes descargarlo desde [nodejs.org](https://nodejs.org).
 
+**Paso 1.2: Crear el Proyecto con Vite**
+```bash
 npm create vite@latest gymtracker-frontend -- --template react
-Esto creará una nueva carpeta gymtracker-frontend con un proyecto de React básico.
+```
 
-Paso 1.3: Instalar Dependencias
-Navega a la nueva carpeta e instala las dependencias necesarias:
-
-Bash
-
+**Paso 1.3: Instalar Dependencias**
+```bash
 cd gymtracker-frontend
 npm install
 npm install react-router-dom axios @chakra-ui/react @emotion/react @emotion/styled framer-motion
-react-router-dom: Para las rutas.
-axios: Para las peticiones a la API.
-@chakra-ui/react y sus dependencias: Nuestra librería de componentes UI.
-Paso 1.4: Configurar Variables de Entorno
-Crea un archivo llamado .env en la raíz de tu proyecto gymtracker-frontend. Dentro, añade la URL de tu API de Laravel:
+```
 
-Fragmento de código
+**Paso 1.4: Configurar Variables de Entorno**
 
+Crear un archivo `.env` en la raíz del proyecto:
+
+```env
 # .env
 VITE_API_BASE_URL=http://127.0.0.1:8000
-Importante: Vite requiere que las variables de entorno expuestas al cliente empiecen con el prefijo VITE_.
+```
+
+> Importante: Vite requiere que las variables de entorno expuestas al cliente empiecen con el prefijo `VITE_`.
 
 #### Segunda Interacción: Diseño de la Página Principal
 
@@ -122,9 +129,8 @@ Importante: Vite requiere que las variables de entorno expuestas al cliente empi
 > Necesito la estructura de carpetas del proyecto
 
 ##### 🤖 Respuesta de Gemini:
-Estructura del Proyecto
-Una buena organización de carpetas es clave. Te recomiendo la siguiente estructura dentro de la carpeta src/:
-
+**Estructura del Proyecto**
+```bash
 gymtracker-frontend/
 └── src/
     ├── api/                 # Peticiones a la API (instancia de Axios, servicios)
@@ -143,7 +149,7 @@ gymtracker-frontend/
     │   └── DashboardPage.jsx
     ├── App.jsx              # Configuración principal de rutas
     └── main.jsx             # Archivo de entrada de la aplicación
-
+```
 
 ### Fase 3: Comprensión de React
 
@@ -152,120 +158,68 @@ gymtracker-frontend/
 ##### 🗨️ Prompt:
 > para que sirve la carpeta api con los archivos Service y AxiosInstance?
 
-
 ##### 🤖 Respuesta de Gemini:
+**La carpeta `api` y sus archivos son clave para separar responsabilidades y mantener el código limpio.**
 
-¡Excelente pregunta! Esa carpeta api y los archivos que contiene son una parte fundamental para que tu proyecto de frontend esté limpio, organizado y sea fácil de mantener a largo plazo.
+**1. `axiosInstance.js`**  
+Tu "mensajero" personalizado:
 
-Su propósito es centralizar y gestionar toda la comunicación con tu API de Laravel. En lugar de hacer llamadas a la API directamente desde tus componentes de React, creamos una capa de abstracción.
-
-Vamos a ver para qué sirve cada parte.
-
-1. El Archivo axiosInstance.js (El "Mensajero" Configurado)
-Piensa en este archivo como tu "mensajero" personal y pre-configurado. En lugar de darle las mismas instrucciones básicas cada vez que lo envías a hacer un recado, ya las tiene memorizadas.
-
-Sus dos tareas principales son:
-
-Conocer la Dirección Base:
-
-JavaScript
-
+```js
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL, // ej: http://127.0.0.1:8000
+  baseURL: import.meta.env.VITE_API_BASE_URL,
 });
-Gracias a esto, en el resto de tu código no necesitas escribir la URL completa. En lugar de axios.get('http://127.0.0.1:8000/api/exercises'), simplemente escribes axiosInstance.get('/api/exercises'). Si en el futuro tu API cambia de dirección, solo tienes que cambiarla en un único sitio: el archivo .env.
 
-Añadir el Token de Autenticación Automáticamente (La Magia):
-
-JavaScript
-
-axiosInstance.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
+axiosInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem('authToken');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
-);
-Esto es un "interceptor". Actúa como un punto de control por el que pasa toda petición saliente. Antes de que la petición se envíe, este código se ejecuta, busca el token en el localStorage y, si lo encuentra, lo añade automáticamente al header Authorization. Esto significa que nunca más tendrás que preocuparte por añadir el token manualmente en cada llamada a una ruta protegida.
+  return config;
+});
+```
 
-2. Los Archivos ...Service.js (Los "Departamentos" Especializados)
-Si axiosInstance es tu mensajero, los archivos como exerciseService.js, sessionService.js, etc., son como los departamentos de tu empresa. Cada uno se especializa en un tipo de tarea.
+**2. Servicios como `authService.js`**  
+Cada servicio se encarga de comunicarse con un endpoint específico:
 
-exerciseService.js: Sabe todo sobre cómo hablar con los endpoints de /api/exercises.
-sessionService.js: Sabe todo sobre los endpoints de /api/sessions.
-authService.js: Se especializa en /api/login y /api/register.
-Las ventajas de esta organización son enormes:
+```js
+// authService.js
+import axiosInstance from './axiosInstance';
 
-Código Limpio y Organizado: Si necesitas cambiar algo sobre cómo se obtienen los ejercicios, sabes exactamente que tienes que ir a exerciseService.js. No tienes que buscar en 10 componentes diferentes.
+export const loginUser = (data) => axiosInstance.post('/api/login', data);
+```
 
-Abstracción (Ocultar Detalles): Tus componentes de React no necesitan saber que estás usando axios, ni cuál es la URL exacta, ni cómo se adjuntan los headers. Un componente simplemente "pide" los datos de una forma muy legible.
+**Ventajas:**
+- Código limpio y mantenible.
+- Abstracción: los componentes no se preocupan de URLs ni tokens.
+- Reutilización: múltiples páginas pueden usar el mismo servicio.
 
-Sin un servicio (dentro de un componente):
+---
 
-JavaScript
+### 🧠 Análisis del Código Generado por IA
 
-// Esto es más difícil de leer y mantener
-const token = localStorage.getItem('authToken');
-axios.get('http://127.0.0.1:8000/api/exercises?page=1', {
-    headers: { Authorization: `Bearer ${token}` }
-}).then(...)
-Con un servicio (dentro de un componente):
+#### ✅ Puntos Fuertes
 
-JavaScript
-
-// Mucho más limpio y descriptivo
-import { fetchExercises } from '../api/exerciseService';
-
-fetchExercises(1).then(...)
-Reutilización: Si varias páginas diferentes necesitaran mostrar la lista de ejercicios, todas importarían y usarían la misma función fetchExercises del servicio, asegurando que la lógica sea consistente en toda la aplicación.
-
-En Resumen
-La carpeta api separa las responsabilidades de tu aplicación:
-
-Componentes React (/pages, /components): Se encargan de la vista (qué mostrar y cómo se ve).
-Servicios API (/api): Se encargan de la comunicación y la lógica de datos (cómo y dónde obtener la información).
-Esta separación hace tu código más profesional, menos repetitivo y mucho más fácil de escalar y depurar en el futuro.
-
-##### 🗨️ Prompt:
-> para que sirve la carpeta api con los archivos Service y AxiosInstance?
-
-##### 🤖 Respuesta de Gemini:
-Los Hooks son la forma moderna de escribir componentes en React. Te permiten:
-
-Añadir estado y lógica compleja a componentes simples (funciones).
-Separar la lógica del renderizado, haciendo el código más limpio y fácil de leer.
-Reutilizar lógica de estado entre diferentes componentes creando tus propios Hooks personalizados.
-Son la herramienta que transforma simples funciones de JavaScript que devuelven HTML en componentes de UI potentes y dinámicos.
-
-###Analysis of the AI-Generated Code
-
-### Strengths
-
-- **Modern React with Functional Components and Hooks:** 
-  - The entire application was built using modern functional components, avoiding legacy class components.
-  - Clean and effective use of React Hooks to manage state, side effects, and context:
+- **React moderno con Hooks**  
+  - Componentes funcionales y uso correcto de hooks (`useState`, `useContext`, `useEffect`).
   
-- **Responsive and Professional UI with Chakra UI:** 
-  - The user interface was built entirely with Chakra UI, a comprehensive component library that ensures a consistent, professional, and accessible design.
-  - The layout is fully responsive, utilizing responsive style props (display={{ base: 'none', md: 'flex' }}) to adapt the navigation from a full navbar on desktop to a hamburger-menu-controlled       sidebar on mobile.
-  - Advanced UI patterns, like the hover-activated Drawer component for the sidebar, provide a modern and fluid user experience.
-  
-- **Clean and Scalable Architecture:** 
-  - The project follows a strong Separation of Concerns principle.
-  - API Layer (src/api): All HTTP request logic is centralized in service files (authService.js, exerciseService.js, etc.). Components are decoupled from axios, making them cleaner and easier to       test. The axiosInstance automatically handles the base URL and authentication tokens.
-  - Global State (src/context): Authentication logic is fully encapsulated within the AuthContext, providing a single source of truth for the user's status.
-  - Component Structure: A clear distinction between reusable components (like Sidebar, Layout) and route-level pages makes the project easy to navigate and maintain.
+- **UI profesional y responsiva con Chakra UI**  
+  - Estilo coherente y adaptable.
+  - Navegación moderna con sidebar colapsable.
 
-### Iterative Process and Refinements
+- **Arquitectura escalable y limpia**  
+  - Separación clara entre lógica de datos (`/api`) y presentación (`/components`, `/pages`).
+  - `axiosInstance` maneja tokens automáticamente.
+  - Contexto global en `/context`.
 
-- **Backend & Frontend Data Synchronization:** 
-  - Problem: The frontend initially couldn't identify admin users because the Laravel API wasn't sending role information.
-  - Refinement: We modified the UserResource on the backend to include the user's roles in the JSON response and updated the AuthController to eager-load this relationship. This ensured the            frontend and backend were perfectly synchronized regarding user permissions.
-  
-- **Handling Asynchronous State (Data Flow Optimization):** 
-  - Problem: Pages like "Stats" were trying to fetch data before the user's ID was available from the AuthContext, causing API calls to /api/users/undefined/....
-  - Refinement: We refined the useEffect hook on these pages to be dependent on the user object (useEffect(..., [user])) and added a guard clause (if (!user) return;). This solved the race             condition and ensured API calls are only made when the necessary data is ready, preventing unnecessary errors and re-renders.
+#### 🔁 Iteraciones y Mejoras
+
+- **Sincronización de roles desde el backend**  
+  - Se actualizó el `UserResource` y `AuthController` en Laravel para incluir roles.
+
+- **Control de estado asincrónico**  
+  - Se mejoraron los `useEffect` en páginas como "Stats" para evitar llamadas con `undefined`.
+
+---
+
 
 
