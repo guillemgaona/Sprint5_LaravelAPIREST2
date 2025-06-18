@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import { fetchSessionById } from '../api/sessionService';
-import { fetchExercises } from '../api/exerciseService';
+import { fetchAllExercises } from '../api/exerciseService';
 import { createSet, deleteSet } from '../api/setService';
 import {
   Box,
@@ -27,20 +27,15 @@ import { FaTrash, FaEdit } from 'react-icons/fa';
 import EditSetModal from '../components/EditSetModal';
 
 const SessionDetailPage = () => {
-  // --- HOOKS Y ESTADO ---
-  const { sessionId } = useParams(); // Obtiene el ID de la sesión desde la URL
+  const { sessionId } = useParams();
   const toast = useToast();
 
-  // Estado para los datos de la página
   const [session, setSession] = useState(null);
   const [sets, setSets] = useState([]);
   const [exercises, setExercises] = useState([]);
-
-  // Estado para la UI (carga y errores)
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Estado para el formulario de añadir una nueva serie
   const [newSetData, setNewSetData] = useState({
     exercise_id: '',
     set_number: 1,
@@ -48,26 +43,20 @@ const SessionDetailPage = () => {
     weight: 20,
   });
 
-  // Estado para el modal de edición de series
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingSet, setEditingSet] = useState(null);
 
-  // --- OBTENCIÓN DE DATOS DE LA API ---
   const loadData = useCallback(async () => {
     try {
       setLoading(true);
-      const [sessionRes, exercisesRes] = await Promise.all([
+      const [sessionRes, exercisesData] = await Promise.all([
         fetchSessionById(sessionId),
-        fetchExercises(),
+        fetchAllExercises(),
       ]);
-
       const sessionData = sessionRes.data.data;
-      const exercisesData = exercisesRes.data.data;
-
       setSession(sessionData);
       setSets(sessionData.sets || []);
       setExercises(exercisesData);
-
       if (exercisesData.length > 0) {
         setNewSetData((prev) => ({ ...prev, exercise_id: exercisesData[0].id }));
       }
@@ -82,27 +71,32 @@ const SessionDetailPage = () => {
     loadData();
   }, [loadData]);
 
-
-  // --- MANEJADORES DE EVENTOS (HANDLERS) ---
-
   const handleOpenEditModal = (set) => {
     setEditingSet(set);
     setIsEditModalOpen(true);
   };
-
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
     setEditingSet(null);
   };
-
   const handleSetUpdated = (updatedSet) => {
     setSets(currentSets =>
       currentSets.map(s => (s.id === updatedSet.id ? updatedSet : s))
     );
   };
-
   const handleNewSetChange = (e) => {
     setNewSetData({ ...newSetData, [e.target.name]: e.target.value });
+  };
+  const handleDeleteSet = async (setId) => {
+    if (window.confirm('Are you sure you want to delete this set?')) {
+        try {
+            await deleteSet(setId);
+            setSets((currentSets) => currentSets.filter((s) => s.id !== setId));
+            toast({ title: 'Set deleted.', status: 'info', duration: 3000, isClosable: true });
+        } catch (err) {
+            toast({ title: 'Error deleting set.', status: 'error', duration: 3000, isClosable: true });
+        }
+    }
   };
 
   const handleAddSet = async (e) => {
@@ -116,27 +110,15 @@ const SessionDetailPage = () => {
       setSets((currentSets) => [...currentSets, response.data.data]);
       setNewSetData((prev) => ({
         ...prev,
-        set_number: Number(prev.set_number) + 1,
+        set_number: 1,
+        repetitions: 10,
+        weight: 20,
       }));
       toast({ title: 'Set added successfully!', status: 'success', duration: 2000, isClosable: true });
     } catch (err) {
       toast({ title: 'Error adding set.', status: 'error', duration: 3000, isClosable: true });
     }
   };
-
-  const handleDeleteSet = async (setId) => {
-    if (window.confirm('Are you sure you want to delete this set?')) {
-      try {
-        await deleteSet(setId);
-        setSets((currentSets) => currentSets.filter((s) => s.id !== setId));
-        toast({ title: 'Set deleted.', status: 'info', duration: 3000, isClosable: true });
-      } catch (err) {
-        toast({ title: 'Error deleting set.', status: 'error', duration: 3000, isClosable: true });
-      }
-    }
-  };
-
-  // --- RENDERIZADO DEL COMPONENTE ---
 
   if (loading) return <Spinner size="xl" display="block" mx="auto" mt="20" />;
   if (error) return <Alert status="error"><AlertIcon />{error}</Alert>;
@@ -159,15 +141,18 @@ const SessionDetailPage = () => {
           <FormControl isRequired>
             <FormLabel>Exercise</FormLabel>
             <Select name="exercise_id" value={newSetData.exercise_id} onChange={handleNewSetChange}>
-              {exercises.map((ex) => <option key={ex.id} value={ex.id}>{ex.name}</option>)}
+              {exercises.map((ex) => (<option key={ex.id} value={ex.id}>{ex.name}</option>))}
             </Select>
           </FormControl>
           <FormControl isRequired>
-            <FormLabel>Set #</FormLabel>
+            <FormLabel>Number of sets</FormLabel>
             <NumberInput name="set_number" value={newSetData.set_number} min={1} onChange={(val) => handleNewSetChange({ target: { name: 'set_number', value: val } })}>
                 <NumberInputField />
             </NumberInput>
           </FormControl>
+          
+          {/* --- INICIO DE LA CORRECCIÓN --- */}
+          {/* Estos eran los campos que faltaban */}
           <FormControl isRequired>
             <FormLabel>Reps</FormLabel>
             <NumberInput name="repetitions" value={newSetData.repetitions} min={0} onChange={(val) => handleNewSetChange({ target: { name: 'repetitions', value: val } })}>
@@ -180,11 +165,14 @@ const SessionDetailPage = () => {
                 <NumberInputField />
             </NumberInput>
           </FormControl>
+          {/* --- FIN DE LA CORRECCIÓN --- */}
+
           <Button type="submit" colorScheme="green">Add Set</Button>
         </SimpleGrid>
       </Box>
 
-      {/* Listado de Series Existentes */}
+      {/* --- INICIO DE LA CORRECCIÓN --- */}
+      {/* Esta era la sección del listado que faltaba */}
       <Heading as="h2" size="lg" mt={8} mb={4}>Logged Sets</Heading>
       <VStack spacing={4} align="stretch">
         {sets.length > 0 ? (
@@ -204,8 +192,9 @@ const SessionDetailPage = () => {
           <Text>No sets have been logged for this session yet.</Text>
         )}
       </VStack>
+      {/* --- FIN DE LA CORRECCIÓN --- */}
 
-      {/* El Modal de Edición (solo visible cuando se necesita) */}
+      {/* El Modal de Edición */}
       {editingSet && (
         <EditSetModal
           isOpen={isEditModalOpen}
