@@ -19,9 +19,7 @@ import EditExercisePage from './pages/admin/EditExercisePage';
 import ExerciseDetailPage from './pages/ExerciseDetailPage'; 
 
 
-// Definimos la estructura de las rutas
 const router = createBrowserRouter([
-  // --- Rutas Públicas ---
     {
     path: '/',
     element: <LandingPage />,
@@ -35,15 +33,14 @@ const router = createBrowserRouter([
     element: <RegisterPage />,
   },
 
-  // --- Rutas Protegidas y con Layout ---
   {
-    path: '/app', // La ruta raíz
+    path: '/app',
     element: (
       <ProtectedRoute>
         <Layout /> 
       </ProtectedRoute>
     ),
-    // Todas las rutas aquí dentro son "hijas" del Layout
+  
     children: [
       { 
         index: true, 

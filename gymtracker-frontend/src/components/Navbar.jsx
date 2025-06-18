@@ -9,12 +9,12 @@ import {
   Button,
   HStack,
   Text,
-  IconButton, // <-- Importa IconButton
+  IconButton,
 } from '@chakra-ui/react';
 import { useAuth } from '../hooks/useAuth';
-import { FaBars } from 'react-icons/fa'; // <-- Importa el icono de hamburguesa
+import { FaBars } from 'react-icons/fa';
 
-// Pasamos la función para abrir el sidebar como una prop
+
 const Navbar = ({ onOpenSidebar }) => {
   const { user } = useAuth();
 
@@ -28,11 +28,11 @@ const Navbar = ({ onOpenSidebar }) => {
       color="white"
       boxShadow="md"
     >
-      {/* Botón de hamburguesa que solo se muestra en pantallas pequeñas ('base' a 'md') */}
+      {}
       <IconButton
         aria-label="Open menu"
         icon={<FaBars />}
-        display={{ base: 'flex', md: 'none' }} // <-- Se muestra en base, se oculta en md y superior
+        display={{ base: 'flex', md: 'none' }} 
         onClick={onOpenSidebar}
         mr={4}
       />
@@ -43,7 +43,7 @@ const Navbar = ({ onOpenSidebar }) => {
 
       <Spacer />
 
-      {/* Los enlaces de navegación ahora se ocultan en pantallas pequeñas */}
+      {}
       <HStack spacing={4} display={{ base: 'none', md: 'flex' }}>
         <Link as={RouterLink} to="/app/exercises" fontSize="lg" _hover={{ color: 'blue.300' }}>Exercises</Link>
         <Link as={RouterLink} to="/app/sessions" fontSize="lg" _hover={{ color: 'blue.300' }}>My Sessions</Link>

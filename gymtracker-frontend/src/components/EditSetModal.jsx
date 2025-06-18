@@ -1,4 +1,3 @@
-// src/components/EditSetModal.jsx
 import React, { useState, useEffect } from 'react';
 import {
   Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton,
@@ -11,7 +10,6 @@ const EditSetModal = ({ isOpen, onClose, setToEdit, onSetUpdated }) => {
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 
-  // Cada vez que el modal se abre con una nueva serie, actualizamos el estado del formulario
   useEffect(() => {
     if (setToEdit) {
       setFormData({
@@ -30,9 +28,9 @@ const EditSetModal = ({ isOpen, onClose, setToEdit, onSetUpdated }) => {
     setIsLoading(true);
     try {
       const response = await updateSet(setToEdit.id, formData);
-      onSetUpdated(response.data.data); // Llama al callback con la serie actualizada
+      onSetUpdated(response.data.data); 
       toast({ title: 'Set updated!', status: 'success', duration: 2000, isClosable: true });
-      onClose(); // Cierra el modal
+      onClose(); 
     } catch (error) {
       toast({ title: 'Error updating set', status: 'error', duration: 3000, isClosable: true });
     } finally {

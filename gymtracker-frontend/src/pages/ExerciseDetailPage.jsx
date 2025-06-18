@@ -16,14 +16,13 @@ import {
 import { FaArrowLeft } from 'react-icons/fa';
 
 const ExerciseDetailPage = () => {
-  const { exerciseId } = useParams(); // Obtiene el ID de la URL
+  const { exerciseId } = useParams();
   const [exercise, setExercise] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Cuando el componente se monta, busca los datos del ejercicio por su ID
     fetchExerciseById(exerciseId)
       .then(response => {
         setExercise(response.data.data);
@@ -34,7 +33,7 @@ const ExerciseDetailPage = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [exerciseId]); // Se vuelve a ejecutar si el ID en la URL cambia
+  }, [exerciseId]);
 
   if (loading) return <Spinner size="xl" display="block" mx="auto" mt="20" />;
   if (error) return <Alert status="error"><AlertIcon />{error}</Alert>;

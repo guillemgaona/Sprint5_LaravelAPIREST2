@@ -134,7 +134,7 @@ const SessionDetailPage = () => {
         <Button as={RouterLink} to={`/app/sessions/${sessionId}/edit`}>Edit Session Details</Button>
       </Flex>
       
-      {/* Formulario para Añadir Nueva Serie */}
+      {}
       <Box as="form" onSubmit={handleAddSet} p={6} borderWidth="1px" borderRadius="md" boxShadow="sm">
         <Heading size="md" mb={4}>Add New Set</Heading>
         <SimpleGrid columns={{ base: 1, md: 5 }} spacing={4} alignItems="end">
@@ -151,7 +151,7 @@ const SessionDetailPage = () => {
             </NumberInput>
           </FormControl>
           
-          {/* --- INICIO DE LA CORRECCIÓN --- */}
+          {}
           {/* Estos eran los campos que faltaban */}
           <FormControl isRequired>
             <FormLabel>Reps</FormLabel>
@@ -165,14 +165,14 @@ const SessionDetailPage = () => {
                 <NumberInputField />
             </NumberInput>
           </FormControl>
-          {/* --- FIN DE LA CORRECCIÓN --- */}
+          {}
 
           <Button type="submit" colorScheme="green">Add Set</Button>
         </SimpleGrid>
       </Box>
 
-      {/* --- INICIO DE LA CORRECCIÓN --- */}
-      {/* Esta era la sección del listado que faltaba */}
+      {}
+      {}
       <Heading as="h2" size="lg" mt={8} mb={4}>Logged Sets</Heading>
       <VStack spacing={4} align="stretch">
         {sets.length > 0 ? (
@@ -192,9 +192,9 @@ const SessionDetailPage = () => {
           <Text>No sets have been logged for this session yet.</Text>
         )}
       </VStack>
-      {/* --- FIN DE LA CORRECCIÓN --- */}
+      {}
 
-      {/* El Modal de Edición */}
+      {}
       {editingSet && (
         <EditSetModal
           isOpen={isEditModalOpen}

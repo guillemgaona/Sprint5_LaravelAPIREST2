@@ -14,21 +14,10 @@ export const fetchAllExercises = async () => {
   return allExercises;
 };
 
-/**
- * Obtiene una lista paginada de todos los ejercicios.
- * @param {number} page - El número de página para la paginación.
- * @returns {Promise} La promesa de la petición de Axios.
- */
 export const fetchExercises = (page = 1) => {
   return axiosInstance.get(`/api/exercises?page=${page}`);
 };
 
-/**
- * Obtiene los detalles de un único ejercicio por su ID.
- * Esto es necesario para la página de edición para poder rellenar el formulario.
- * @param {number|string} id - El ID del ejercicio a obtener.
- * @returns {Promise} La promesa de la petición de Axios.
- */
 export const fetchExerciseById = (id) => {
   return axiosInstance.get(`/api/exercises/${id}`);
 };

@@ -29,7 +29,7 @@ const DashboardPage = () => {
 
       <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10}>
         
-        {/* Card 1: Mis Sesiones */}
+        {}
         <Card borderWidth="1px" borderRadius="lg" boxShadow="md">
           <CardHeader>
             <Heading size="md">My Training Sessions</Heading>
@@ -44,7 +44,7 @@ const DashboardPage = () => {
           </CardBody>
         </Card>
 
-        {/* Card 2: Mis Estadísticas */}
+        {}
         <Card borderWidth="1px" borderRadius="lg" boxShadow="md">
           <CardHeader>
             <Heading size="md">My Performance Stats</Heading>
@@ -59,7 +59,7 @@ const DashboardPage = () => {
           </CardBody>
         </Card>
 
-        {/* Card 3: Ver Ejercicios */}
+        {}
         <Card borderWidth="1px" borderRadius="lg" boxShadow="md">
           <CardHeader>
             <Heading size="md">Browse Exercises</Heading>

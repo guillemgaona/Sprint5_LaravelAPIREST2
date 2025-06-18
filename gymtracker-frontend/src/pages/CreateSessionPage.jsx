@@ -1,4 +1,3 @@
-// src/pages/CreateSessionPage.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createSession } from '../api/sessionService';
@@ -7,7 +6,7 @@ import {
 } from '@chakra-ui/react';
 
 const CreateSessionPage = () => {
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]); // Fecha de hoy
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [notes, setNotes] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -17,7 +16,7 @@ const CreateSessionPage = () => {
     setError('');
     try {
       await createSession({ date, notes });
-      navigate('/app/sessions'); // Redirigir a la lista de sesiones
+      navigate('/app/sessions');
     } catch (err) {
       setError('Failed to create session. Please try again.');
       console.error(err);

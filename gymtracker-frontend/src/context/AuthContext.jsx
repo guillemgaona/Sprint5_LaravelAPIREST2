@@ -16,7 +16,6 @@ export const AuthProvider = ({ children }) => {
       
       getAuthenticatedUser()
         .then((response) => {
-          // AHORA LA RESPUESTA ES DIRECTAMENTE EL OBJETO DE USUARIO
           setUser(response.data);
         })
         .catch(() => {
@@ -29,15 +28,15 @@ export const AuthProvider = ({ children }) => {
     } else {
       setLoading(false);
     }
-  }, []); // Se ejecuta solo una vez al cargar la app
+  }, []);
 
   const login = async (email, password) => {
     const response = await loginUser({ email, password });
-    const { access_token, user: userData } = response.data; // userData es ahora el objeto de usuario
+    const { access_token, user: userData } = response.data;
     localStorage.setItem('authToken', access_token);
     axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
     setToken(access_token);
-    setUser(userData); // <-- Se guarda directamente el objeto de usuario
+    setUser(userData);
   };
 
   const logout = () => {
