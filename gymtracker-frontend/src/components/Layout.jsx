@@ -1,22 +1,20 @@
 import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import { Box, useBreakpointValue } from '@chakra-ui/react'; // <-- Importa useBreakpointValue
+import { Box, useBreakpointValue, Flex } from '@chakra-ui/react';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
+import Footer from './Footer';
 
 const Layout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
-
-  // useBreakpointValue nos permite cambiar valores según el tamaño de la pantalla
-  // isDesktop será 'true' en pantallas 'md' y superiores
   const isDesktop = useBreakpointValue({ base: false, md: true });
 
   const handleCloseSidebar = () => setSidebarOpen(false);
   const handleOpenSidebar = () => setSidebarOpen(true);
 
   return (
-    <Box>
-      {/* El área de activación por hover solo se renderiza si estamos en escritorio */}
+    <Flex direction="column" minHeight="100vh">
+      {}
       {isDesktop && (
         <Box
           position="fixed"
@@ -28,22 +26,23 @@ const Layout = () => {
           zIndex="overlay"
         />
       )}
-
-      {/* Pasamos la función para abrir el sidebar al Navbar */}
-      <Navbar onOpenSidebar={handleOpenSidebar} />
-
-      {/* El Sidebar ahora se cierra al pasar el ratón por fuera (en escritorio) */}
-      {/* o al hacer clic en el overlay (en móvil) */}
       <Sidebar
         isOpen={isSidebarOpen}
         onClose={handleCloseSidebar}
         onMouseLeave={isDesktop ? handleCloseSidebar : undefined}
       />
 
-      <Box as="main" p={8}>
+      {}
+      <Navbar onOpenSidebar={handleOpenSidebar} />
+
+      {}
+      <Box as="main" p={8} flex="1">
         <Outlet />
       </Box>
-    </Box>
+
+      {}
+      <Footer />
+    </Flex>
   );
 };
 

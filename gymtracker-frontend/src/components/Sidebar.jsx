@@ -13,14 +13,13 @@ import {
   Icon,
   Box,
   Flex,
-  Spacer, // Spacer ya no es necesario aquí, pero puede quedarse
+  Spacer,
   useColorModeValue,
 } from '@chakra-ui/react';
 import { useAuth } from '../hooks/useAuth';
 import { MdDashboard, MdFitnessCenter, MdTimeline, MdQueryStats, MdExitToApp } from 'react-icons/md';
 import ThemeToggleButton from './ThemeToggleButton';
 
-// El componente NavItem no necesita cambios
 const NavItem = ({ icon, children, to, onClick }) => {
   const location = useLocation();
   const isActive = location.pathname === to;
@@ -62,7 +61,7 @@ const Sidebar = ({ isOpen, onClose, onMouseLeave }) => {
       <DrawerContent onMouseLeave={onMouseLeave}>
         <DrawerCloseButton />
         
-        {/* Cabecera simplificada sin el botón */}
+        {}
         <DrawerHeader borderBottomWidth="1px">
           GymTracker Menu
         </DrawerHeader>
@@ -77,8 +76,8 @@ const Sidebar = ({ isOpen, onClose, onMouseLeave }) => {
             </VStack>
           </DrawerBody>
 
-          {/* --- INICIO DE LA CORRECCIÓN --- */}
-          {/* Área inferior que ahora contiene ambos botones */}
+          {}
+          {}
           <Box p={4} borderTopWidth="1px">
             <Flex justify="space-between" align="center">
               <Button colorScheme="red" leftIcon={<MdExitToApp />} onClick={handleLogout}>
@@ -87,7 +86,7 @@ const Sidebar = ({ isOpen, onClose, onMouseLeave }) => {
               <ThemeToggleButton />
             </Flex>
           </Box>
-          {/* --- FIN DE LA CORRECCIÓN --- */}
+          {}
         </Flex>
       </DrawerContent>
     </Drawer>

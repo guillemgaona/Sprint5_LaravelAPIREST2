@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardBody,
   Text,
-  Spinner, // Seguiremos usando Spinner para otros casos si fuera necesario, pero no para la carga inicial de la lista
+  Spinner,
   Alert,
   AlertIcon,
   Flex,
@@ -22,7 +22,7 @@ import {
   Link,
 } from '@chakra-ui/react';
 import { FaEdit, FaTrash, FaPlus, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
-import ExerciseCardSkeleton from '../components/ExerciseCardSkeleton'; // <-- Importa el nuevo componente
+import ExerciseCardSkeleton from '../components/ExerciseCardSkeleton'; 
 
 const ExercisesPage = () => {
   const [exercises, setExercises] = useState([]);
@@ -52,10 +52,8 @@ const ExercisesPage = () => {
   }, [currentPage]);
 
   const handleDelete = async (exerciseId) => {
-    // ... tu función de borrar
   };
 
-  // La lógica de `if (loading)` se mueve al JSX para un renderizado más limpio
   if (error) return <Alert status="error"><AlertIcon />{error}</Alert>;
 
   return (
@@ -69,15 +67,13 @@ const ExercisesPage = () => {
         )}
       </Flex>
       
-      {/* Renderizado Condicional: Muestra Skeletons o los Ejercicios */}
+      {}
       <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
         {loading ? (
-          // Si está cargando, muestra una parrilla de 9 skeletons
           Array.from({ length: 9 }).map((_, index) => (
             <ExerciseCardSkeleton key={index} />
           ))
         ) : (
-          // Si ya no está cargando, muestra los ejercicios reales
           exercises.map((exercise) => (
             <Link
               as={RouterLink}
@@ -103,7 +99,7 @@ const ExercisesPage = () => {
         )}
       </SimpleGrid>
 
-      {/* Controles de Paginación (solo se muestran si no está cargando y hay más de una página) */}
+      {}
       {!loading && paginationMeta && paginationMeta.last_page > 1 && (
         <Flex justify="center" align="center" mt={8}>
           <Button

@@ -1,4 +1,3 @@
-// src/pages/RegisterPage.jsx
 import React, { useState } from 'react';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { registerUser } from '../api/authService';
@@ -47,7 +46,7 @@ const RegisterPage = () => {
         {error && <Alert status="error"><AlertIcon />{error}</Alert>}
         {success && <Alert status="success"><AlertIcon />{success}</Alert>}
         
-        {/* Campos del formulario */}
+        {}
         <FormControl isRequired><FormLabel>Name</FormLabel><Input type="text" name="name" onChange={handleChange} /></FormControl>
         <FormControl isRequired><FormLabel>Username</FormLabel><Input type="text" name="username" onChange={handleChange} /></FormControl>
         <FormControl isRequired><FormLabel>Email</FormLabel><Input type="email" name="email" onChange={handleChange} /></FormControl>

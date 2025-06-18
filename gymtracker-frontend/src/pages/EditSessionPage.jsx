@@ -1,4 +1,3 @@
-// src/pages/EditSessionPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchSessionById, updateSession } from '../api/sessionService';
@@ -27,7 +26,7 @@ const EditSessionPage = () => {
     e.preventDefault();
     try {
       await updateSession(sessionId, formData);
-      navigate(`/app/sessions`); // Volver a la lista de sesiones
+      navigate(`/app/sessions`);
     } catch (err) {
       setError('Failed to update session.');
     }

@@ -41,7 +41,7 @@ export default function LandingPage() {
             alignSelf={'center'}
             position={'relative'}
           >
-            {/* Botón de Login */}
+            {}
             <Button
               as={RouterLink}
               to="/login"
@@ -56,7 +56,7 @@ export default function LandingPage() {
               Login
             </Button>
             
-            {/* Botón de Register */}
+            {}
             <Button as={RouterLink} to="/register" variant={'link'} colorScheme={'blue'} size={'sm'}>
               Create an Account
             </Button>

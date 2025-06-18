@@ -1,4 +1,3 @@
-// src/api/sessionService.js
 import axiosInstance from './axiosInstance';
 
 export const fetchMySessions = () => {

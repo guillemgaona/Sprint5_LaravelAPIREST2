@@ -23,24 +23,20 @@ import {
 } from '@chakra-ui/react';
 
 const StatsPage = () => {
-  const { user } = useAuth(); // Obtiene el usuario desde el contexto de autenticación
+  const { user } = useAuth();
   const [stats, setStats] = useState({ volume: [], frequency: [], prs: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    // Esta guarda es crucial: no hace nada si el objeto 'user' aún no está disponible.
     if (!user || !user.id) {
-      // Si el AuthContext todavía no ha cargado el usuario, esperamos.
-      // Cuando `user` cambie de `null` a un objeto, este useEffect se ejecutará de nuevo.
       return;
     }
 
     const fetchAllStats = async () => {
       try {
-        setLoading(true); // Muestra el spinner mientras se cargan los datos
+        setLoading(true);
 
-        // Hacemos todas las peticiones en paralelo para mejorar el rendimiento
         const [volumeRes, frequencyRes, prsRes] = await Promise.all([
           getVolumeStats(user.id),
           getFrequencyStats(user.id),
@@ -61,9 +57,8 @@ const StatsPage = () => {
     };
 
     fetchAllStats();
-  }, [user]); // El array de dependencias [user] asegura que esto se ejecute cuando `user` se cargue
+  }, [user]);
 
-  // Renderizado condicional
   if (loading) {
     return <Spinner size="xl" display="block" mx="auto" mt="20" />;
   }
@@ -78,7 +73,7 @@ const StatsPage = () => {
 
       <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={10}>
         
-        {/* Sección de Volumen Total */}
+        {}
         <Box>
           <Heading size="lg" mb={4}>Total Volume by Muscle Group</Heading>
           <VStack spacing={4} align="stretch">
@@ -95,7 +90,7 @@ const StatsPage = () => {
           </VStack>
         </Box>
 
-        {/* Sección de Récords Personales */}
+        {}
         <Box>
           <Heading size="lg" mb={4}>Personal Records (Max Weight)</Heading>
           <TableContainer borderWidth="1px" borderRadius="md" boxShadow="sm">
@@ -123,7 +118,7 @@ const StatsPage = () => {
         </Box>
       </SimpleGrid>
 
-      {/* Sección de Frecuencia de Sesiones */}
+      {}
       <Box mt={10}>
         <Heading size="lg" mb={4}>Session Frequency (Last 12 Weeks)</Heading>
         <TableContainer borderWidth="1px" borderRadius="md" boxShadow="sm">
