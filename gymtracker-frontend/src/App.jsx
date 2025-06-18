@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 
 // Importa todos tus componentes de página y layout
+import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
@@ -15,11 +16,16 @@ import Layout from './components/Layout';
 import AdminRoute from './components/AdminRoute';
 import CreateExercisePage from './pages/admin/CreateExercisePage';
 import EditExercisePage from './pages/admin/EditExercisePage';
+import ExerciseDetailPage from './pages/ExerciseDetailPage'; 
 
 
 // Definimos la estructura de las rutas
 const router = createBrowserRouter([
   // --- Rutas Públicas ---
+    {
+    path: '/',
+    element: <LandingPage />,
+  },
   {
     path: '/login',
     element: <LoginPage />,
@@ -31,7 +37,7 @@ const router = createBrowserRouter([
 
   // --- Rutas Protegidas y con Layout ---
   {
-    path: '/', // La ruta raíz
+    path: '/app', // La ruta raíz
     element: (
       <ProtectedRoute>
         <Layout /> 
@@ -50,6 +56,10 @@ const router = createBrowserRouter([
       {
         path: 'exercises',
         element: <ExercisesPage />,
+      },
+      {
+        path: 'exercises/:exerciseId',
+        element: <ExerciseDetailPage />,
       },
       {
         path: 'sessions',

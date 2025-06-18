@@ -1,65 +1,61 @@
 import React from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { Box, Flex, Link, Button, Heading, Spacer } from '@chakra-ui/react';
+import { Link as RouterLink } from 'react-router-dom';
+import {
+  Box,
+  Flex,
+  Heading,
+  Spacer,
+  Link,
+  Button,
+  HStack,
+  Text,
+  IconButton, // <-- Importa IconButton
+} from '@chakra-ui/react';
 import { useAuth } from '../hooks/useAuth';
+import { FaBars } from 'react-icons/fa'; // <-- Importa el icono de hamburguesa
 
-const Navbar = () => {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-
-  // Comprobar si el usuario tiene el rol de admin
-  const isAdmin = user?.roles?.some(role => role.name === 'admin');
-
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
+// Pasamos la función para abrir el sidebar como una prop
+const Navbar = ({ onOpenSidebar }) => {
+  const { user } = useAuth();
 
   return (
     <Flex
       as="nav"
       align="center"
       justify="space-between"
-      wrap="wrap"
       padding="1.5rem"
       bg="gray.800"
       color="white"
       boxShadow="md"
     >
-      <Flex align="center" mr={5}>
-        <Heading as="h1" size="lg" letterSpacing={'-.1rem'}>
-          <Link as={RouterLink} to="/dashboard" _hover={{ textDecoration: 'none' }}>
-            GymTracker
-          </Link>
-        </Heading>
-      </Flex>
+      {/* Botón de hamburguesa que solo se muestra en pantallas pequeñas ('base' a 'md') */}
+      <IconButton
+        aria-label="Open menu"
+        icon={<FaBars />}
+        display={{ base: 'flex', md: 'none' }} // <-- Se muestra en base, se oculta en md y superior
+        onClick={onOpenSidebar}
+        mr={4}
+      />
+      
+      <Heading as="h1" size="lg" letterSpacing={'-.1rem'}>
+        <Link as={RouterLink} to="/app/dashboard" _hover={{ textDecoration: 'none' }}>GymTracker</Link>
+      </Heading>
 
       <Spacer />
 
-      <Box display={{ base: 'none', md: 'flex' }} alignItems="center">
-        <Link as={RouterLink} to="/dashboard" p={2} mr={2}>
-          Dashboard
-        </Link>
-        <Link as={RouterLink} to="/exercises" p={2} mr={2}>
-          Exercises
-        </Link>
-        <Link as={RouterLink} to="/sessions" p={2} mr={2}>
-          My Sessions
-        </Link>
-        <Link as={RouterLink} to="/stats" p={2} mr={4}>
-          My Stats
-        </Link>
+      {/* Los enlaces de navegación ahora se ocultan en pantallas pequeñas */}
+      <HStack spacing={4} display={{ base: 'none', md: 'flex' }}>
+        <Link as={RouterLink} to="/app/exercises" fontSize="lg" _hover={{ color: 'blue.300' }}>Exercises</Link>
+        <Link as={RouterLink} to="/app/sessions" fontSize="lg" _hover={{ color: 'blue.300' }}>My Sessions</Link>
+        <Link as={RouterLink} to="/app/stats" fontSize="lg" _hover={{ color: 'blue.300' }}>My Stats</Link>
+      </HStack>
 
-        {/* Enlace condicional para el panel de administrador */}
-        {isAdmin && (
-          <Link as={RouterLink} to="/admin/users" p={2} mr={4} fontWeight="bold" color="yellow.300">
-            Admin Panel
-          </Link>
-        )}
-
-        <Button colorScheme="red" onClick={handleLogout}>
-          Logout ({user?.name})
-        </Button>
+      <Spacer />
+      
+      <Box>
+        <Text fontSize="lg" fontWeight="medium">
+          Welcome, {user?.name || 'User'}!
+        </Text>
       </Box>
     </Flex>
   );

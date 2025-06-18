@@ -17,7 +17,7 @@ const CreateSessionPage = () => {
     setError('');
     try {
       await createSession({ date, notes });
-      navigate('/sessions'); // Redirigir a la lista de sesiones
+      navigate('/app/sessions'); // Redirigir a la lista de sesiones
     } catch (err) {
       setError('Failed to create session. Please try again.');
       console.error(err);
